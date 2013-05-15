@@ -11,11 +11,14 @@ void RobertDowneyJr();
 void ElementareWatson();
 void merge(int* v, int start, int center, int end);
 void mergesort(int* v, int start, int end);
+int Max(int i, int j);
+int NonTantoElementareWatson(int riga, int colonna, int contatore);
 
 //***************VARIABILI*****************
 
 int serate, momenti, travestimenti;
 int** matrice;
+int contaStampa;
 
 // IL VALORE 1 CORRISPONDE A J
 // IL VALORE 0 CORRISPONDE A H
@@ -23,7 +26,10 @@ int** matrice;
 //***************FUNZIONI******************
 int main(){
 	RobertDowneyJr();
-	ElementareWatson();
+	//ElementareWatson();
+	int istanti = NonTantoElementareWatson(0,-1,0);
+
+	cout<<"istanti:"<<istanti<<" con "<<contaStampa<<" travestimenti"<<endl;
 	
 	return 0;
 }
@@ -138,9 +144,53 @@ void ElementareWatson(){
 
 	ofstream out("output.txt");
 	out<<soluzione;
-
 }
 
+//caso complicato:
+/*
+IDEA:
+soluzione dinamica:
+trovare il max(cambio vestito, non cambio vestito) tra tutte le serate tramite una funzione ricorsiva.
+questo finchè non ho esaurito i travestimenti
+*/
+int NonTantoElementareWatson(int riga, int colonna, int contaTrav){
+	//cout<<"riga:"<<riga<<" serate:"<<serate<<" colonna:"<<colonna<<" momenti:"<<momenti<<endl;
+	if(riga == serate && colonna == momenti){
+		contaStampa = contaTrav;
+		return 1;
+	}
+	else{
+		if(colonna<momenti)
+			colonna++;
+		else{
+			riga++;
+			colonna = 0;
+		}
+		//cout<<"contaTrav:"<<contaTrav<<" travestimenti:"<<travestimenti<<endl;
+		if(contaTrav == travestimenti){
+			contaStampa = contaTrav;
+			return 1;
+		}
+		else{
+			contaTrav++;		
+			if(matrice[riga][colonna] == matrice[riga][colonna+1] && riga != 0 && colonna != 0)
+				NonTantoElementareWatson(riga,colonna,contaTrav--)+1;
+			else{
+				Max(NonTantoElementareWatson(riga,colonna,contaTrav)+1,NonTantoElementareWatson(riga,colonna,contaTrav--));
+			}
+		}
+	}
+}
+
+int Max(int i, int j){
+	if(i>j)
+		return i;
+	else
+		return j;
+}
+
+
+//ORDINAMENTO DECRESCENTE PER CASO BASE
 void merge(int* v, int start, int center, int end){
   int s = start;
   int c = center+1;
@@ -170,7 +220,6 @@ void merge(int* v, int start, int center, int end){
   for(int i=start; i<=end; i++)
     v[i] = supp[i-start];
 }
-
 void mergesort(int* v, int start, int end){
   if(start<end){
     int center = (start+end)/2;
