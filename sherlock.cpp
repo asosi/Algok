@@ -12,7 +12,7 @@ void ElementareWatson();
 void merge(int* v, int start, int center, int end);
 void mergesort(int* v, int start, int end);
 int Max(int i, int j);
-int NonTantoElementareWatson(int riga, int colonna, int contatore);
+int Sherlock(int riga, int colonna, int contaT, int valAt);
 
 //***************VARIABILI*****************
 
@@ -27,9 +27,9 @@ int contaStampa;
 int main(){
 	RobertDowneyJr();
 	//ElementareWatson();
-	int istanti = NonTantoElementareWatson(0,-1,0);
+	int istanti = Sherlock(0,-1,0,-1);
 
-	cout<<"istanti:"<<istanti<<" con "<<contaStampa<<" travestimenti"<<endl;
+	cout<<"istanti:"<<istanti<<endl;
 	
 	return 0;
 }
@@ -153,33 +153,35 @@ soluzione dinamica:
 trovare il max(cambio vestito, non cambio vestito) tra tutte le serate tramite una funzione ricorsiva.
 questo finchè non ho esaurito i travestimenti
 */
-int NonTantoElementareWatson(int riga, int colonna, int contaTrav){
-	//cout<<"riga:"<<riga<<" serate:"<<serate<<" colonna:"<<colonna<<" momenti:"<<momenti<<endl;
-	if(riga == serate && colonna == momenti){
-		contaStampa = contaTrav;
-		return 1;
-	}
+int Sherlock(int riga, int colonna, int contaT, int valAt){
+	if(colonna<momenti-1)
+		colonna++;
 	else{
-		if(colonna<momenti)
-			colonna++;
-		else{
+		if(riga<serate-1){
 			riga++;
 			colonna = 0;
-		}
-		//cout<<"contaTrav:"<<contaTrav<<" travestimenti:"<<travestimenti<<endl;
-		if(contaTrav == travestimenti){
-			contaStampa = contaTrav;
-			return 1;
-		}
-		else{
-			contaTrav++;		
-			if(matrice[riga][colonna] == matrice[riga][colonna+1] && riga != 0 && colonna != 0)
-				NonTantoElementareWatson(riga,colonna,contaTrav--)+1;
-			else{
-				Max(NonTantoElementareWatson(riga,colonna,contaTrav)+1,NonTantoElementareWatson(riga,colonna,contaTrav--));
-			}
+			valAt = -1;
 		}
 	}
+
+	//cout<<"contaT:"<<contaT<<" valAt:"<<valAt<<" riga:"<<riga<<" col:"<<colonna<<endl;
+	if(contaT==travestimenti){
+		//cout<<"finito con:"<<contaT<<" travestimenti"<<endl;
+		return 1;
+	}
+	else if(riga == 0 && colonna == 0){
+		return Max(Sherlock(riga,colonna,contaT+1, matrice[riga][colonna])+1,Sherlock(riga,colonna,contaT,valAt));
+	}
+	else if(riga == serate-1 && colonna == momenti-1){
+		return 1;
+	}
+	else if(matrice[riga][colonna] == valAt){
+		return Sherlock(riga,colonna,contaT, valAt)+1;
+	}
+	else{
+		return Max(Sherlock(riga,colonna,contaT+1, matrice[riga][colonna])+1,Sherlock(riga,colonna,contaT,valAt));
+	}
+
 }
 
 int Max(int i, int j){
