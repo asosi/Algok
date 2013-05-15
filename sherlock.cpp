@@ -154,6 +154,7 @@ trovare il max(cambio vestito, non cambio vestito) tra tutte le serate tramite u
 questo finchè non ho esaurito i travestimenti
 */
 int Sherlock(int riga, int colonna, int contaT, int valAt){
+
 	if(colonna<momenti-1)
 		colonna++;
 	else{
@@ -167,13 +168,10 @@ int Sherlock(int riga, int colonna, int contaT, int valAt){
 	//cout<<"contaT:"<<contaT<<" valAt:"<<valAt<<" riga:"<<riga<<" col:"<<colonna<<endl;
 	if(contaT==travestimenti){
 		//cout<<"finito con:"<<contaT<<" travestimenti"<<endl;
-		return 0;
-	}
-	else if(riga == 0 && colonna == 0){
-		return Max(Sherlock(riga,colonna,contaT+1, matrice[riga][colonna])+1,Sherlock(riga,colonna,contaT,valAt));
+		return 1;
 	}
 	else if(riga == serate-1 && colonna == momenti-1){
-		return 0;
+		return 1;
 	}
 	else if(matrice[riga][colonna] == valAt){
 		return Sherlock(riga,colonna,contaT, valAt)+1;
