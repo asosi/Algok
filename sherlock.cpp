@@ -8,17 +8,23 @@ using namespace std;
 
 //****************HEADER*******************
 void RobertDowneyJr();
-void ElementareWatson();
+int ElementareWatson();
 void merge(int* v, int start, int center, int end);
 void mergesort(int* v, int start, int end);
 int Max(int i, int j);
 int Sherlock(int riga, int colonna, int contaT, int valAt);
+bool TrovaRiga(int riga);
+int* FormattaMatrix(int riga);
+int SherlockPack(int riga, int colonna, int contaT, int valAt);
 
 //***************VARIABILI*****************
 
 int serate, momenti, travestimenti;
 int** matrice;
 int contaStampa;
+int** newMatrice;
+int istanti = 0;
+int contaSerateTolte = 0;
 
 // IL VALORE 1 CORRISPONDE A J
 // IL VALORE 0 CORRISPONDE A H
@@ -26,10 +32,44 @@ int contaStampa;
 //***************FUNZIONI******************
 int main(){
 	RobertDowneyJr();
-	//ElementareWatson();
-	int istanti = Sherlock(0,-1,0,-1);
+/*
+	cout<<endl<<"NEW MATRICE"<<endl;
+	for(int i = 0; i < serate-contaSerateTolte; i++){
+		for(int j = 0; j < momenti; j++){
+			cout<<newMatrice[i][j]<<" ";
+		}
+		cout<<endl;
+	}
+*/
+	//istanti = ElementareWatson();
+	//if(travestimenti!=0)
+	//	istanti += Sherlock(0,0,0,-1);
 
-	cout<<"istanti:"<<istanti<<endl;
+
+	for(int i = 0; i < serate - contaSerateTolte; i++){
+		newMatrice[i] = FormattaMatrix(i);
+	}
+
+	cout<<"istanti prima:"<<istanti<<endl;
+
+	cout<<endl<<"MATRICE FORMATTATA"<<endl;
+	for(int i = 0; i < serate-contaSerateTolte; i++){
+		for(int j = 0; j < momenti; j++){
+			cout<<newMatrice[i][j]<<" ";
+		}
+		cout<<endl;
+	}
+
+
+	istanti += SherlockPack(0,0,0,-1);
+
+	
+
+	cout<<endl<<"istanti:"<<istanti<<endl;
+
+
+	ofstream out("output.txt");
+	out<<istanti;
 	
 	return 0;
 }
@@ -55,6 +95,29 @@ void RobertDowneyJr(){
 			else
 				matrice[i][j] = 0;
 		}
+		
+	}
+
+	int k=0;
+	newMatrice = new int*[serate];
+
+	for(int i = 0; i < serate; i++){
+		newMatrice[i] = new int[momenti];
+	}
+
+	for(int i = 0; i < serate; i++){
+		if(TrovaRiga(i)){
+			if(travestimenti>0){
+				travestimenti--;
+				matrice[i][0] = -1;
+				istanti += momenti;
+				contaSerateTolte++;
+			}
+		}
+		else{
+			newMatrice[k] = matrice[i];
+			k++;
+		}
 	}
 
 	cout<<"N:"<<serate<<" m:"<<momenti<<" t:"<<travestimenti<<endl;
@@ -68,10 +131,11 @@ void RobertDowneyJr(){
 		cout<<endl;
 	}
 	cout<<endl;
+	
 }
 
 //caso base
-void ElementareWatson(){
+int ElementareWatson(){
 	vector<int> contaJ;
 	vector<int> contaH;
 	
@@ -93,6 +157,7 @@ void ElementareWatson(){
 		coJ = 0;
 	}
 
+	
 	cout<<"stampo numero H"<<endl;
 	for(int i = 0; i < contaH.size(); i++){
 		cout<<contaH[i]<<" ";
@@ -104,15 +169,15 @@ void ElementareWatson(){
 	}
 
 	cout<<endl;
-
+	
 	//ordino vettore
-	int* totali = new int[serate*2];
 
+	int* totali = new int[serate*2];
 	for(int i = 0; i < serate*2; i+=2){
 		totali[i] = 0;
 	}
 
- int j = 0;
+ 	int j = 0;
 	for(int i = 0; i < serate*2; i+=2){
 		totali[i] = contaH[j];
 		totali[i+1] = contaJ[j];
@@ -141,9 +206,7 @@ void ElementareWatson(){
 	}
 
 	cout<<"soluzione:"<<soluzione<<endl;
-
-	ofstream out("output.txt");
-	out<<soluzione;
+	return soluzione;
 }
 
 //caso complicato:
@@ -155,30 +218,110 @@ questo finchè non ho esaurito i travestimenti
 */
 int Sherlock(int riga, int colonna, int contaT, int valAt){
 
-	if(colonna<momenti-1)
-		colonna++;
-	else{
-		if(riga<serate-1){
+	if(colonna == momenti){
+		if(riga<serate - contaSerateTolte){
 			riga++;
 			colonna = 0;
 			valAt = -1;
 		}
 	}
 
-	//cout<<"contaT:"<<contaT<<" valAt:"<<valAt<<" riga:"<<riga<<" col:"<<colonna<<endl;
-	if(contaT==travestimenti){
-		//cout<<"finito con:"<<contaT<<" travestimenti"<<endl;
-		return 1;
+	//cout<<"valAt"<<valAt<<" riga:"<<riga<<" colonna:"<<colonna<<" contaT:"<<contaT<<endl;
+
+
+	if(riga == serate - contaSerateTolte){
+		return 0;
 	}
-	else if(riga == serate-1 && colonna == momenti-1){
-		return 1;
+	else if(colonna==momenti){
+		return 0;
 	}
-	else if(matrice[riga][colonna] == valAt){
-		return Sherlock(riga,colonna,contaT, valAt)+1;
+	if(contaT==travestimenti+1){
+	//cout<<"finito con:"<<contaT<<" travestimenti"<<endl;
+		return 0;
+	}
+	else if(newMatrice[riga][colonna] == valAt){
+		//cout<<"entro"<<endl;
+		return Sherlock(riga,colonna+1,contaT, valAt)+1;
 	}
 	else{
-		return Max(Sherlock(riga,colonna,contaT+1, matrice[riga][colonna])+1,Sherlock(riga,colonna,contaT,valAt));
+		if(contaT+1<travestimenti+1)
+			return Max(Sherlock(riga,colonna+1,contaT+1, newMatrice[riga][colonna])+1,Sherlock(riga,colonna+1,contaT,valAt));
+		else
+			Sherlock(riga,colonna+1,contaT,valAt);
+
 	}
+}
+
+int SherlockPack(int riga, int colonna, int contaT, int valAt){
+	
+	if(newMatrice[riga][colonna] == 0 || colonna == momenti){
+		if(riga<serate - contaSerateTolte){
+			riga++;
+			colonna = 0;
+			valAt = -1;
+		}
+	}
+
+	if(riga == serate - contaSerateTolte){
+		return 0;
+	}
+	else if(colonna==momenti || newMatrice[riga][colonna] == 0 ){
+		return 0;
+	}
+	if(contaT==travestimenti+1){
+	//cout<<"finito con:"<<contaT<<" travestimenti"<<endl;
+		return 0;
+	}
+	else if(colonna%2 == valAt){
+		//cout<<"entro"<<endl;
+		return SherlockPack(riga,colonna+1,contaT, valAt)+ newMatrice[riga][colonna];
+	}
+	else{
+		if(contaT+1<travestimenti+1){
+			return Max(SherlockPack(riga,colonna+1,contaT+1, colonna%2)+newMatrice[riga][colonna],SherlockPack(riga,colonna+1,contaT,valAt));
+		}
+		else{
+			SherlockPack(riga,colonna+1,contaT,valAt);
+		}
+
+	}
+}
+
+int* FormattaMatrix(int riga){
+	int* array = new int[momenti];
+
+	for(int i = 0; i < momenti; i++)
+		array[i] = 0;
+
+	int valAt = -1;
+
+	int z = -1;
+
+	for(int j = 0; j < momenti; j++){
+		if(newMatrice[riga][j] != valAt){
+			valAt = newMatrice[riga][j];
+			z++;
+		}
+
+		array[z]++;
+		//cout<<"z:"<<z<<" array[z]:"<<array[z]<<" matrice[i][j]:"<<matrice[i][j]<<" valAt:"<<valAt<<endl;
+	}
+
+	//cout<<endl<<"riga:"<<riga<<endl;
+	//for(int i = 0; i < momenti; i++)
+	//	cout<<array[i]<<" ";
+	//cout<<endl;
+
+	return array;
+}
+
+bool TrovaRiga(int riga){
+	int h = matrice[riga][0];
+	for(int i = 1; i < momenti; i++){
+		if(matrice[riga][i] != h)
+			return false;
+	}
+	return true;
 }
 
 int Max(int i, int j){
@@ -187,7 +330,6 @@ int Max(int i, int j){
 	else
 		return j;
 }
-
 
 //ORDINAMENTO DECRESCENTE PER CASO BASE
 void merge(int* v, int start, int center, int end){
