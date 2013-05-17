@@ -337,15 +337,24 @@ void Sherlock_markII(){
 		int maxJ = SommaElementi(listaSerate[i]->j);
 		if(maxH > maxJ){
 			listaSerate[i]->peso = maxH;
-			massimi.push_back(maxH);
 		}
 		else{				
 			listaSerate[i]->peso = maxJ;
-			massimi.push_back(maxJ);
 		}
 	}
 
 	mergesort(listaSerate,0,(serate-contaSerateTolte)-1);
+
+	for(int i = 0; i < serate-contaSerateTolte-1; i++){
+		int maxH = SommaElementi(listaSerate[i]->h);
+		int maxJ = SommaElementi(listaSerate[i]->j);
+		if(maxH > maxJ){
+			massimi.push_back(maxH);
+		}
+		else{				
+			massimi.push_back(maxJ);
+		}
+	}
 
 	StampaVector(massimi,"massimi: ");
 
