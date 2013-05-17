@@ -320,8 +320,16 @@ void Sherlock_markII(){
 		cout<<endl;
 	}
 
-	mergesort(listaSerate,0,serate-contaSerateTolte);
+	mergesort(listaSerate,0,serate-contaSerateTolte-1);
 	cout << "ORDINO MA CONTROLLA SIA ORDINATO DAL BON!!!\n";
+	
+	for(int i = 0; i < serate-contaSerateTolte; i++){
+		cout<<"serata "<<i<<endl;
+		StampaVector(listaSerate[i]->h,"h: ");
+		StampaVector(listaSerate[i]->j,"j: ");
+		cout<<endl;
+	}
+	
 	vector<int> massimi;
 	massimi.resize(serate-contaSerateTolte);
 
@@ -405,35 +413,33 @@ int Max(int i, int j){
 
 //ORDINAMENTO DECRESCENTE PER CASO BASE
 void merge(Serata** v, int start, int center, int end){
-  int s = start;
-  int c = center+1;
-  Serata* supp[end-start];
-  int i = 0;
-  if(s>=0 &&  c < (serate-contaSerateTolte)-1){
-	  while(s<=center && c<=end){
-	    if(v[s]->scambi > v[c]->scambi){
-	      supp[i] = v[s];
-	      s++;
-	    }
-	    else{
-	      supp[i] = v[c];
-	      c++;
-	    }
-	    i++;
-	  }
-	  while(s<=center){
-	    supp[i] = v[s];
-	    s++;
-	    i++;
-	  }
-	  while(c<=end){
-	    supp[i] = v[c];
-	    c++;
-	    i++;
-	  }
-	  for(int i=start; i<=end; i++)
-	    v[i] = supp[i-start];
-	}
+  	int s = start;
+  	int c = center+1;
+  	Serata** supp = new Serata*[end-start];
+  	int i = 0;
+	while(s<=center && c<=end){
+		if(v[s]->scambi < v[c]->scambi){
+    		supp[i] = v[s];
+      		s++;
+    	}
+    	else{
+      		supp[i] = v[c];
+      		c++;
+    	}
+    	i++;
+  	}
+  	while(s<=center){
+    	supp[i] = v[s];
+    	s++;
+    	i++;
+  	}
+  	while(c<=end){
+    	supp[i] = v[c];
+    	c++;
+    	i++;
+  	}
+  	for(int i=start; i<=end; i++)
+    	v[i] = supp[i-start];
 }
 void mergesort(Serata** v, int start, int end){
   if(start<end){
