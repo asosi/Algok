@@ -12,6 +12,7 @@ struct Serata{
 	vector<int> h;
 	vector<int> j;
 	int peso;
+	int inizio;
 };
 
 //****************************************HEADER********************************************
@@ -31,6 +32,7 @@ int SommaElementi(vector<int> v);
 
 //***************************************VARIABILI******************************************
 int serate, momenti, travestimenti;
+int veritravestimenti; //si potra togliere questa riga
 int** matrice;
 int** newMatrice;
 int istanti = 0;
@@ -46,7 +48,6 @@ int main(){
 
 	cout<<"N:"<<serate<<" m:"<<momenti<<" t:"<<travestimenti<<endl;
 	cout<<"0->H - 1->J"<<endl<<endl;
-
 	//StampaMatrice(matrice,"MATRICE");
 	cout<<"istanti prima:"<<istanti<<endl<<endl;
 	//StampaMatrice(newMatrice,"NEW MATRICE");
@@ -66,7 +67,10 @@ int main(){
 
 	ofstream out("output.txt");
 	out<<istanti;
-	
+	int sommatoria = contaSerateTolte;
+	for(int i=0; i<serate-contaSerateTolte;i++)
+		sommatoria+= listaSerate[i]->scambi;
+	cout<<"MI SERVONO MASSIMO "<< sommatoria << " SCAMBI, E NE HO " << veritravestimenti <<"\n";
 	return 0;
 }
 
@@ -106,7 +110,7 @@ void RobertDowneyJr(){
 	
 	ifstream in ("input.txt");
 	in >> serate >> momenti >> travestimenti;
-
+	veritravestimenti = travestimenti; //si potrà togliere questa riga
 	matrice = new int*[serate];
 
 	for(int i = 0; i < serate; i++){
@@ -416,7 +420,7 @@ int Max(int i, int j){
 		return j;
 }
 
-//ORDINAMENTO DECRESCENTE PER CASO BASE
+//ORDINAMENTO CON MERGE SORT
 void merge(Serata** v, int start, int center, int end){
   	int s = start;
   	int c = center+1;
