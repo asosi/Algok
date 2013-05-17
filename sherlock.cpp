@@ -17,6 +17,7 @@ bool TrovaRiga(int riga);
 int* FormattaMatrix(int riga);
 int SherlockPack(int riga, int colonna, int contaT, int valAt);
 void StampaMatrice(int** matrix, string nome);
+int Sherlock_markII();
 
 //***************************************VARIABILI******************************************
 int serate, momenti, travestimenti;
@@ -24,6 +25,13 @@ int** matrice;
 int** newMatrice;
 int istanti = 0;
 int contaSerateTolte = 0;
+
+//***************************************S**STRUCT******************************************
+struct serata{
+	int scambi;
+	vector<int> h;
+	vector<int> j;
+};
 //******************************************************************************************
 
 int main(){
@@ -45,7 +53,8 @@ int main(){
 	StampaMatrice(newMatrice,"MATRICE FORMATTATA");
 
 	//CHIAMO IL METODO PER RISOLVERE L'ALGORITMO
-	istanti += SherlockPack(0,0,0,-1);	
+	//istanti += SherlockPack(0,0,0,-1);	
+	Sherlock_markII();
 
 	cout<<"istanti:"<<istanti<<endl;
 
@@ -59,11 +68,15 @@ int main(){
 
 void StampaMatrice(int** matrix, string nome){
 
-	switch(nome){
-		case "MATRICE": k = 0;break;
-		default : k = contaSerateTolte;break;
-	}
+	int k;
+
+	if(nome == "MATRICE")
+		k = 0;
+	else
+		k = contaSerateTolte;
+
 	cout<<nome<<endl;
+
 	for(int i = 0; i < serate - k; i++){
 		for(int j = 0; j < momenti; j++){
 			cout<<matrix[i][j]<<" ";
@@ -266,7 +279,14 @@ int SherlockPack(int riga, int colonna, int contaT, int valAt){
 		}
 	}
 }
+//terzo metodo: ?
+int Sherlock_markII(){
+	vector<serata*> listaSerate;
+	for(int i = 0; i < serate; i++){
+		listaSerate[i] = new serata();
+	} 
 
+}
 
 //metodo che formatta le righe della matrice es. 0001111 -> 34
 int* FormattaMatrix(int riga){
