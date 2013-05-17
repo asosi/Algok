@@ -321,7 +321,6 @@ void Sherlock_markII(){
 		cout<<endl;
 	}
 */
-	mergesort(listaSerate,0,(serate-contaSerateTolte)-1);
 	cout << "ORDINO MA CONTROLLA SIA ORDINATO DAL BON!!!\n";
 	/*
 	for(int i = 0; i < serate-contaSerateTolte; i++){
@@ -342,22 +341,25 @@ void Sherlock_markII(){
 		//cout<<"B"<<endl;
 		if(maxH >= max || maxJ >= max){
 			if(maxH > maxJ){
-				//max = maxH;
+				listaSerate[i]->peso = maxH;
 				massimi.push_back(maxH);
 			}
 			else{				
-				//max = maxJ;
+				listaSerate[i]->peso = maxJ;
 				massimi.push_back(maxJ);
 			}
 		}
 	}
 
+	mergesort(listaSerate,0,(serate-contaSerateTolte)-1);
+
 	StampaVector(massimi,"massimi: ");
 	cout<<endl<<"max:"<<max<<endl;
 
-	for(int i = massimi.size()-1; i > -1; i--){
+	for(int i = 0; i < massimi.size(); i++){
+		if(massimi[i]!=0)
 		if(travestimenti!=0){
-			//cout<<massimi[i]<<endl;
+			cout<<massimi[i]<<endl;
 			istanti += massimi[i];
 			travestimenti--;
 		}
