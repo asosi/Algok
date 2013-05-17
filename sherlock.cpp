@@ -73,7 +73,7 @@ int main(){
 	//CHIAMO IL METODO PER RISOLVERE L'ALGORITMO
 	//istanti += SherlockPack(0,0,0,-1);	
 
-	Sherlock_markIII();
+	Sherlock_markII();
 
 	//int sommatoria = contaSerateTolte;
 	//for(int i=0; i<serate-contaSerateTolte;i++)
@@ -447,6 +447,7 @@ void Sherlock_markIII(){
 	}
 }
 
+//metodo che somma gli elementi di un vettore
 int SommaElementi(vector<int> v){
 	int somma = 0;
 	for(int i = 0; i < v.size(); i++)
