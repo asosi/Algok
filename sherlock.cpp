@@ -13,6 +13,7 @@ struct Serata{
 	vector<int> j;
 	int peso;
 	int inizio;
+	int peso2;
 };
 
 //****************************************HEADER********************************************
@@ -28,6 +29,7 @@ int SherlockPack(int riga, int colonna, int contaT, int valAt);
 void StampaMatrice(int** matrix, string nome);
 void StampaVector(vector<int> v, string nome);
 void Sherlock_markII();
+void Sherlock_markIII();
 int SommaElementi(vector<int> v);
 
 //***************************************VARIABILI******************************************
@@ -52,6 +54,15 @@ int main(){
 	cout<<"istanti prima:"<<istanti<<endl<<endl;
 	//StampaMatrice(newMatrice,"NEW MATRICE");
 
+
+	listaSerate = new Serata*[serate-contaSerateTolte];
+	for(int i = 0; i < serate-contaSerateTolte; i++){
+		listaSerate[i] = new Serata;
+	}
+
+	for(int i = 0; i<serate-contaSerateTolte; i++)
+		listaSerate[i]->inizio = newMatrice[i][0];
+
 	//FORMATTO LA MATRICE
 	for(int i = 0; i < serate - contaSerateTolte; i++){
 		newMatrice[i] = FormattaMatrix(i);
@@ -61,14 +72,15 @@ int main(){
 
 	//CHIAMO IL METODO PER RISOLVERE L'ALGORITMO
 	//istanti += SherlockPack(0,0,0,-1);	
-	Sherlock_markII();
 
-	int sommatoria = contaSerateTolte;
-	for(int i=0; i<serate-contaSerateTolte;i++)
-	sommatoria+= listaSerate[i]->scambi;
-	cout<<"MI SERVONO MASSIMO "<< sommatoria << " SCAMBI, E NE HO " << veritravestimenti <<"\n";
-	if(sommatoria==veritravestimenti)
-		istanti = (serate)*(momenti);
+	Sherlock_markIII();
+
+	//int sommatoria = contaSerateTolte;
+	//for(int i=0; i<serate-contaSerateTolte;i++)
+	//sommatoria+= listaSerate[i]->scambi;
+	//cout<<"MI SERVONO MASSIMO "<< sommatoria << " SCAMBI, E NE HO " << veritravestimenti <<"\n";
+	//if(sommatoria==veritravestimenti)
+	//	istanti = (serate)*(momenti);
 	cout<<"istanti:"<<istanti<<endl;
 	ofstream out("output.txt");
 	out<<istanti;
@@ -151,6 +163,7 @@ void RobertDowneyJr(){
 			k++;
 		}
 	}
+
 }
 
 //caso base
@@ -301,10 +314,6 @@ int SherlockPack(int riga, int colonna, int contaT, int valAt){
 }
 //terzo metodo: ?
 void Sherlock_markII(){
-	listaSerate = new Serata*[serate-contaSerateTolte];
-	for(int i = 0; i < serate-contaSerateTolte; i++){
-		listaSerate[i] = new Serata;
-	}
 
 	for(int i = 0; i < serate-contaSerateTolte; i++){
 		listaSerate[i]->scambi = 0;
@@ -317,24 +326,8 @@ void Sherlock_markII(){
 					listaSerate[i]->j.push_back(newMatrice[i][j]);	
 			}		
 		}
-	}	
-/*
-	for(int i = 0; i < serate-contaSerateTolte; i++){
-		cout<<"serata "<<i<<endl;
-		StampaVector(listaSerate[i]->h,"h: ");
-		StampaVector(listaSerate[i]->j,"j: ");
-		cout<<endl;
 	}
-*/
-	//cout << "ORDINO MA CONTROLLA SIA ORDINATO DAL BON!!!\n";
-	/*
-	for(int i = 0; i < serate-contaSerateTolte; i++){
-		cout<<"serata "<<i<<endl;
-		//StampaVector(listaSerate[i]->h,"h: ");
-		//StampaVector(listaSerate[i]->j,"j: ");
-		//cout<<endl;
-	}
-	*/
+
 	vector<int> massimi;
 
 	for(int i = serate-contaSerateTolte-1; i > -1; i--){
@@ -342,11 +335,14 @@ void Sherlock_markII(){
 		int maxJ = SommaElementi(listaSerate[i]->j);
 		if(maxH > maxJ){
 			listaSerate[i]->peso = maxH;
+			listaSerate[i]->peso2 = maxJ;
 		}
 		else{				
 			listaSerate[i]->peso = maxJ;
+			listaSerate[i]->peso2 = maxH;
 		}
 	}
+
 
 	mergesort(listaSerate,0,(serate-contaSerateTolte)-1);
 
@@ -356,7 +352,7 @@ void Sherlock_markII(){
 		if(maxH > maxJ){
 			massimi.push_back(maxH);
 		}
-		else{				
+		else{		
 			massimi.push_back(maxJ);
 		}
 	}
@@ -370,6 +366,84 @@ void Sherlock_markII(){
 			istanti += massimi[i];
 			travestimenti--;
 		}
+	}
+}
+
+void Sherlock_markIII(){
+
+	if(travestimenti==0)
+		return;
+	else{
+
+		listaSerate = new Serata*[serate-contaSerateTolte];
+		for(int i = 0; i < serate-contaSerateTolte; i++){
+			listaSerate[i] = new Serata;
+		}
+
+		for(int i = 0; i < serate-contaSerateTolte; i++){
+			listaSerate[i]->scambi = 0;
+			for(int j = 0; j < momenti; j++){
+				if(newMatrice[i][j] != 0){
+					listaSerate[i]->scambi++;
+					if(j%2==0){
+						listaSerate[i]->h.push_back(newMatrice[i][j]);
+					}
+					else{
+						listaSerate[i]->j.push_back(newMatrice[i][j]);
+					}
+				}		
+			}
+		}
+
+		vector<int> massimi;
+
+		for(int i = serate-contaSerateTolte-1; i > -1; i--){
+			int maxH = SommaElementi(listaSerate[i]->h);
+			int maxJ = SommaElementi(listaSerate[i]->j);
+			if(maxH > maxJ){
+				listaSerate[i]->peso = maxH;
+				listaSerate[i]->peso2 = maxJ;
+			}
+			else{				
+				listaSerate[i]->peso = maxJ;
+				listaSerate[i]->peso2 = maxH;
+			}
+		}
+
+
+		mergesort(listaSerate,0,(serate-contaSerateTolte)-1);
+
+		for(int i = 0; i < serate-contaSerateTolte; i++){
+			int maxH = SommaElementi(listaSerate[i]->h);
+			int maxJ = SommaElementi(listaSerate[i]->j);
+			if(maxH > maxJ){
+				massimi.push_back(maxH);
+				for(int j = 0; j < momenti; j++){
+					if(j%2==0)
+						newMatrice[i][j] = 0;
+				}
+			}
+			else{		
+				massimi.push_back(maxJ);
+				for(int j = 0; j < momenti; j++){
+					if(j%2==1)
+						newMatrice[i][j] = 1;
+				}
+			}
+		}
+
+		StampaVector(massimi,"massimi: ");
+
+		for(int i = 0; i < massimi.size(); i++){
+			if(massimi[i]!=0)
+			if(travestimenti!=0){
+				//cout<<massimi[i]<<endl;
+				istanti += massimi[i];
+				travestimenti--;
+			}
+		}
+
+		Sherlock_markIII();
 	}
 }
 
