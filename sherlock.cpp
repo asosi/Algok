@@ -320,7 +320,7 @@ void Sherlock_markII(){
 		cout<<endl;
 	}
 
-	mergesort(listaSerate,0,serate-contaSerateTolte-1);
+	mergesort(listaSerate,0,(serate-contaSerateTolte)-1);
 	cout << "ORDINO MA CONTROLLA SIA ORDINATO DAL BON!!!\n";
 	
 	for(int i = 0; i < serate-contaSerateTolte; i++){
@@ -415,7 +415,7 @@ int Max(int i, int j){
 void merge(Serata** v, int start, int center, int end){
   	int s = start;
   	int c = center+1;
-  	Serata** supp = new Serata*[end-start];
+  	Serata* supp[end-start];
   	int i = 0;
 	while(s<=center && c<=end){
 		if(v[s]->scambi < v[c]->scambi){
