@@ -26,6 +26,7 @@ int SherlockPack(int riga, int colonna, int contaT, int valAt);
 void StampaMatrice(int** matrix, string nome);
 void StampaVector(vector<int> v, string nome);
 void Sherlock_markII();
+int SommaElementi(vector<int> v);
 
 //***************************************VARIABILI******************************************
 int serate, momenti, travestimenti;
@@ -318,6 +319,47 @@ void Sherlock_markII(){
 		StampaVector(listaSerate[i]->j,"j: ");
 		cout<<endl;
 	}
+
+	mergesort(listaSerate,0,serate-contaSerateTolte);
+
+	vector<int> massimi;
+	massimi.resize(serate-contaSerateTolte);
+
+	int max = 0;
+	for(int i = serate-contaSerateTolte-1; i > -1; i--){
+		cout<<"A"<<endl;
+		int maxH = SommaElementi(listaSerate[i]->h);
+		int maxJ = SommaElementi(listaSerate[i]->j);
+		cout<<"B"<<endl;
+		if(maxH >= max || maxJ >= max){
+			if(maxH > maxJ){
+				max = maxH;
+				massimi.push_back(maxH);
+			}
+			else{				
+				max = maxJ;
+				massimi.push_back(maxJ);
+			}
+		}
+	}
+
+	StampaVector(massimi,"massimi: ");
+	cout<<endl<<"max:"<<max<<endl;
+
+	for(int i = massimi.size()-1; i > -1; i--){
+		if(travestimenti!=0){
+			cout<<massimi[i]<<endl;
+			istanti += massimi[i];
+			travestimenti--;
+		}
+	}
+}
+
+int SommaElementi(vector<int> v){
+	int somma = 0;
+	for(int i = 0; i < v.size(); i++)
+		somma += v[i];
+	return somma;
 }
 
 //metodo che formatta le righe della matrice es. 0001111 -> 34
