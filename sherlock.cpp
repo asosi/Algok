@@ -321,7 +321,7 @@ void Sherlock_markII(){
 		cout<<endl;
 	}
 */
-	cout << "ORDINO MA CONTROLLA SIA ORDINATO DAL BON!!!\n";
+	//cout << "ORDINO MA CONTROLLA SIA ORDINATO DAL BON!!!\n";
 	/*
 	for(int i = 0; i < serate-contaSerateTolte; i++){
 		cout<<"serata "<<i<<endl;
@@ -331,14 +331,11 @@ void Sherlock_markII(){
 	}
 	*/
 	vector<int> massimi;
-	massimi.resize(serate-contaSerateTolte);
 
 	int max = 0;
 	for(int i = serate-contaSerateTolte-1; i > -1; i--){
-		//cout<<"A"<<endl;
 		int maxH = SommaElementi(listaSerate[i]->h);
 		int maxJ = SommaElementi(listaSerate[i]->j);
-		//cout<<"B"<<endl;
 		if(maxH >= max || maxJ >= max){
 			if(maxH > maxJ){
 				listaSerate[i]->peso = maxH;
