@@ -17,7 +17,14 @@ bool TrovaRiga(int riga);
 int* FormattaMatrix(int riga);
 int SherlockPack(int riga, int colonna, int contaT, int valAt);
 void StampaMatrice(int** matrix, string nome);
-int Sherlock_markII();
+void Sherlock_markII();
+
+//***************************************S**STRUCT******************************************
+struct Serata{
+	int scambi;
+	vector<int> h;
+	vector<int> j;
+};
 
 //***************************************VARIABILI******************************************
 int serate, momenti, travestimenti;
@@ -25,14 +32,10 @@ int** matrice;
 int** newMatrice;
 int istanti = 0;
 int contaSerateTolte = 0;
+vector<Serata*> listaSerate;
 
-//***************************************S**STRUCT******************************************
-struct serata{
-	int scambi;
-	vector<int> h;
-	vector<int> j;
-};
-//******************************************************************************************
+
+//*****************************************************************************************
 
 int main(){
 	//inizializza tutto
@@ -280,12 +283,11 @@ int SherlockPack(int riga, int colonna, int contaT, int valAt){
 	}
 }
 //terzo metodo: ?
-int Sherlock_markII(){
-	vector<serata*> listaSerate;
+void Sherlock_markII(){
+	listaSerate.resize(serate);
 	for(int i = 0; i < serate; i++){
-		listaSerate[i] = new serata();
-	} 
-
+		listaSerate[i] = new Serata;
+	}
 }
 
 //metodo che formatta le righe della matrice es. 0001111 -> 34
