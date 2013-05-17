@@ -16,6 +16,7 @@ int Sherlock(int riga, int colonna, int contaT, int valAt);
 bool TrovaRiga(int riga);
 int* FormattaMatrix(int riga);
 int SherlockPack(int riga, int colonna, int contaT, int valAt);
+bool TrovaRigaMezza(int riga);
 
 //***************VARIABILI*****************
 
@@ -32,15 +33,15 @@ int contaSerateTolte = 0;
 //***************FUNZIONI******************
 int main(){
 	RobertDowneyJr();
-/*
-	cout<<endl<<"NEW MATRICE"<<endl;
+
+	cout<<"NEW MATRICE"<<endl;
 	for(int i = 0; i < serate-contaSerateTolte; i++){
 		for(int j = 0; j < momenti; j++){
 			cout<<newMatrice[i][j]<<" ";
 		}
 		cout<<endl;
 	}
-*/
+
 	//istanti = ElementareWatson();
 	//if(travestimenti!=0)
 	//	istanti += Sherlock(0,0,0,-1);
@@ -50,7 +51,7 @@ int main(){
 		newMatrice[i] = FormattaMatrix(i);
 	}
 
-	cout<<"istanti prima:"<<istanti<<endl;
+	cout<<endl<<"istanti prima:"<<istanti<<endl;
 
 	cout<<endl<<"MATRICE FORMATTATA"<<endl;
 	for(int i = 0; i < serate-contaSerateTolte; i++){
@@ -214,8 +215,9 @@ int ElementareWatson(){
 IDEA:
 soluzione dinamica:
 trovare il max(cambio vestito, non cambio vestito) tra tutte le serate tramite una funzione ricorsiva.
-questo finchè non ho esaurito i travestimenti
+questo finchè non ho esaurito i travestimenti o non sono arrivato alla fine della matrice
 */
+
 int Sherlock(int riga, int colonna, int contaT, int valAt){
 
 	if(colonna == momenti){
@@ -283,10 +285,10 @@ int SherlockPack(int riga, int colonna, int contaT, int valAt){
 		else{
 			SherlockPack(riga,colonna+1,contaT,valAt);
 		}
-
 	}
 }
 
+//metodo che formatta le righe della matrice es. 0001111 -> 34
 int* FormattaMatrix(int riga){
 	int* array = new int[momenti];
 
@@ -304,17 +306,12 @@ int* FormattaMatrix(int riga){
 		}
 
 		array[z]++;
-		//cout<<"z:"<<z<<" array[z]:"<<array[z]<<" matrice[i][j]:"<<matrice[i][j]<<" valAt:"<<valAt<<endl;
 	}
-
-	//cout<<endl<<"riga:"<<riga<<endl;
-	//for(int i = 0; i < momenti; i++)
-	//	cout<<array[i]<<" ";
-	//cout<<endl;
 
 	return array;
 }
 
+//metodo che data una riga restituisce true se è formata da tutti 0 o tutti 1
 bool TrovaRiga(int riga){
 	int h = matrice[riga][0];
 	for(int i = 1; i < momenti; i++){
@@ -324,6 +321,7 @@ bool TrovaRiga(int riga){
 	return true;
 }
 
+//calcola il massimo tra due inter
 int Max(int i, int j){
 	if(i>j)
 		return i;
