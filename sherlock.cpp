@@ -11,6 +11,7 @@ struct Serata{
 	int scambi;
 	vector<int> h;
 	vector<int> j;
+	int peso;
 };
 
 //****************************************HEADER********************************************
@@ -418,7 +419,7 @@ void merge(Serata** v, int start, int center, int end){
   	Serata* supp[end-start];
   	int i = 0;
 	while(s<=center && c<=end){
-		if(v[s]->scambi < v[c]->scambi){
+		if(v[s]->peso > v[c]->peso){
     		supp[i] = v[s];
       		s++;
     	}
