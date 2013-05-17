@@ -332,7 +332,7 @@ void Sherlock_markII(){
 	*/
 	vector<int> massimi;
 
-	for(int i = serate-contaSerateTolte-1; i > -1; i--){
+	for(int i = serate-contaSerateTolte; i > -1; i--){
 		int maxH = SommaElementi(listaSerate[i]->h);
 		int maxJ = SommaElementi(listaSerate[i]->j);
 		if(maxH > maxJ){
@@ -345,7 +345,7 @@ void Sherlock_markII(){
 
 	mergesort(listaSerate,0,(serate-contaSerateTolte)-1);
 
-	for(int i = 0; i < serate-contaSerateTolte-1; i++){
+	for(int i = 0; i < serate-contaSerateTolte; i++){
 		int maxH = SommaElementi(listaSerate[i]->h);
 		int maxJ = SommaElementi(listaSerate[i]->j);
 		if(maxH > maxJ){
