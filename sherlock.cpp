@@ -333,7 +333,7 @@ void Sherlock_markII(){
 	vector<int> massimi;
 	massimi.resize(serate-contaSerateTolte);
 
-	//int max = 0;
+	int max = 0;
 	for(int i = serate-contaSerateTolte-1; i > -1; i--){
 		//cout<<"A"<<endl;
 		int maxH = SommaElementi(listaSerate[i]->h);
