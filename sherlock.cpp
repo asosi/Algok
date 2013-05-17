@@ -46,16 +46,16 @@ int main(){
 	cout<<"N:"<<serate<<" m:"<<momenti<<" t:"<<travestimenti<<endl;
 	cout<<"0->H - 1->J"<<endl<<endl;
 
-	StampaMatrice(matrice,"MATRICE");
+	//StampaMatrice(matrice,"MATRICE");
 	cout<<"istanti prima:"<<istanti<<endl<<endl;
-	StampaMatrice(newMatrice,"NEW MATRICE");
+	//StampaMatrice(newMatrice,"NEW MATRICE");
 
 	//FORMATTO LA MATRICE
 	for(int i = 0; i < serate - contaSerateTolte; i++){
 		newMatrice[i] = FormattaMatrix(i);
 	}
 
-	StampaMatrice(newMatrice,"MATRICE FORMATTATA");
+	//StampaMatrice(newMatrice,"MATRICE FORMATTATA");
 
 	//CHIAMO IL METODO PER RISOLVERE L'ALGORITMO
 	//istanti += SherlockPack(0,0,0,-1);	
@@ -312,22 +312,22 @@ void Sherlock_markII(){
 			}		
 		}
 	}	
-
+/*
 	for(int i = 0; i < serate-contaSerateTolte; i++){
 		cout<<"serata "<<i<<endl;
 		StampaVector(listaSerate[i]->h,"h: ");
 		StampaVector(listaSerate[i]->j,"j: ");
 		cout<<endl;
 	}
-
+*/
 	mergesort(listaSerate,0,(serate-contaSerateTolte)-1);
 	cout << "ORDINO MA CONTROLLA SIA ORDINATO DAL BON!!!\n";
 	
 	for(int i = 0; i < serate-contaSerateTolte; i++){
 		cout<<"serata "<<i<<endl;
-		StampaVector(listaSerate[i]->h,"h: ");
-		StampaVector(listaSerate[i]->j,"j: ");
-		cout<<endl;
+		//StampaVector(listaSerate[i]->h,"h: ");
+		//StampaVector(listaSerate[i]->j,"j: ");
+		//cout<<endl;
 	}
 	
 	vector<int> massimi;
@@ -335,10 +335,10 @@ void Sherlock_markII(){
 
 	int max = 0;
 	for(int i = serate-contaSerateTolte-1; i > -1; i--){
-		cout<<"A"<<endl;
+		//cout<<"A"<<endl;
 		int maxH = SommaElementi(listaSerate[i]->h);
 		int maxJ = SommaElementi(listaSerate[i]->j);
-		cout<<"B"<<endl;
+		//cout<<"B"<<endl;
 		if(maxH >= max || maxJ >= max){
 			if(maxH > maxJ){
 				max = maxH;
@@ -356,7 +356,7 @@ void Sherlock_markII(){
 
 	for(int i = massimi.size()-1; i > -1; i--){
 		if(travestimenti!=0){
-			cout<<massimi[i]<<endl;
+			//cout<<massimi[i]<<endl;
 			istanti += massimi[i];
 			travestimenti--;
 		}
