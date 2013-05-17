@@ -6,11 +6,18 @@ using namespace std;
 // IL VALORE 1 CORRISPONDE A J
 // IL VALORE 0 CORRISPONDE A H
 
+//***************************************S**STRUCT******************************************
+struct Serata{
+	int scambi;
+	vector<int> h;
+	vector<int> j;
+};
+
 //****************************************HEADER********************************************
 void RobertDowneyJr();
 int ElementareWatson();
-void merge(int* v, int start, int center, int end);
-void mergesort(int* v, int start, int end);
+void merge(Serata** v, int start, int center, int end);
+void mergesort(Serata** v, int start, int end);
 int Max(int i, int j);
 int Sherlock(int riga, int colonna, int contaT, int valAt);
 bool TrovaRiga(int riga);
@@ -21,20 +28,13 @@ void StampaVector(vector<int> v, string nome);
 void Sherlock_markII();
 int SommaElementi(vector<int> v);
 
-//***************************************S**STRUCT******************************************
-struct Serata{
-	int scambi;
-	vector<int> h;
-	vector<int> j;
-};
-
 //***************************************VARIABILI******************************************
 int serate, momenti, travestimenti;
 int** matrice;
 int** newMatrice;
 int istanti = 0;
 int contaSerateTolte = 0;
-vector<Serata*> listaSerate;
+Serata** listaSerate;
 
 
 //*****************************************************************************************
@@ -201,7 +201,7 @@ int ElementareWatson(){
 	}
 	cout<<endl;
 
-	mergesort(totali,0,(serate*2)-1);
+	//mergesort(totali,0,(serate*2)-1); [TODO]: creare una merge per gli int se serve
 
 	cout<<"totali ordinati:"<<endl;
 	for(int i = 0; i < serate*2; i++){
@@ -294,7 +294,7 @@ int SherlockPack(int riga, int colonna, int contaT, int valAt){
 }
 //terzo metodo: ?
 void Sherlock_markII(){
-	listaSerate.resize(serate-contaSerateTolte);
+	listaSerate = new Serata*[serate-contaSerateTolte];
 	for(int i = 0; i < serate-contaSerateTolte; i++){
 		listaSerate[i] = new Serata;
 	}
@@ -406,13 +406,13 @@ int Max(int i, int j){
 }
 
 //ORDINAMENTO DECRESCENTE PER CASO BASE
-void merge(int* v, int start, int center, int end){
+void merge(Serata** v, int start, int center, int end){
   int s = start;
   int c = center+1;
-  int supp[end-start];
+  Serata** supp = new Serata*[end-start];
   int i = 0;
   while(s<=center && c<=end){
-    if(v[s] > v[c]){
+    if(v[s]->scambi > v[c]->scambi){
       supp[i] = v[s];
       s++;
     }
@@ -435,7 +435,7 @@ void merge(int* v, int start, int center, int end){
   for(int i=start; i<=end; i++)
     v[i] = supp[i-start];
 }
-void mergesort(int* v, int start, int end){
+void mergesort(Serata** v, int start, int end){
   if(start<end){
     int center = (start+end)/2;
     mergesort(v,start,center);
