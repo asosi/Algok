@@ -58,8 +58,13 @@ int main(){
 //***************************************FUNZIONI******************************************
 
 void StampaMatrice(int** matrix, string nome){
+
+	switch(nome){
+		case "MATRICE": k = 0;break;
+		default : k = contaSerateTolte;break;
+	}
 	cout<<nome<<endl;
-	for(int i = 0; i < serate - contaSerateTolte; i++){
+	for(int i = 0; i < serate - k; i++){
 		for(int j = 0; j < momenti; j++){
 			cout<<matrix[i][j]<<" ";
 		}
