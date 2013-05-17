@@ -17,6 +17,7 @@ bool TrovaRiga(int riga);
 int* FormattaMatrix(int riga);
 int SherlockPack(int riga, int colonna, int contaT, int valAt);
 void StampaMatrice(int** matrix, string nome);
+void StampaVector(vector<int> v, string nome);
 void Sherlock_markII();
 
 //***************************************S**STRUCT******************************************
@@ -85,6 +86,15 @@ void StampaMatrice(int** matrix, string nome){
 			cout<<matrix[i][j]<<" ";
 		}
 		cout<<endl;
+	}
+	cout<<endl;
+}
+void StampaVector(vector<int> v, string nome){
+
+	cout<<nome;
+
+	for(int i = 0; i < v.size(); i++){
+		cout<<v[i]<<" ";
 	}
 	cout<<endl;
 }
@@ -284,9 +294,29 @@ int SherlockPack(int riga, int colonna, int contaT, int valAt){
 }
 //terzo metodo: ?
 void Sherlock_markII(){
-	listaSerate.resize(serate);
-	for(int i = 0; i < serate; i++){
+	listaSerate.resize(serate-contaSerateTolte);
+	for(int i = 0; i < serate-contaSerateTolte; i++){
 		listaSerate[i] = new Serata;
+	}
+
+	for(int i = 0; i < serate-contaSerateTolte; i++){
+		listaSerate[i]->scambi = 0;
+		for(int j = 0; j < momenti; j++){
+			if(newMatrice[i][j] != 0){
+				listaSerate[i]->scambi++;
+				if(j%2==0)
+					listaSerate[i]->h.push_back(newMatrice[i][j]);
+				else
+					listaSerate[i]->j.push_back(newMatrice[i][j]);	
+			}		
+		}
+	}	
+
+	for(int i = 0; i < serate-contaSerateTolte; i++){
+		cout<<"serata "<<i<<endl;
+		StampaVector(listaSerate[i]->h,"h: ");
+		StampaVector(listaSerate[i]->j,"j: ");
+		cout<<endl;
 	}
 }
 
