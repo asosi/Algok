@@ -3,7 +3,10 @@
 #include <vector>
 using namespace std;
 
-//****************HEADER*******************
+// IL VALORE 1 CORRISPONDE A J
+// IL VALORE 0 CORRISPONDE A H
+
+//****************************************HEADER********************************************
 void RobertDowneyJr();
 int ElementareWatson();
 void merge(int* v, int start, int center, int end);
@@ -13,19 +16,16 @@ int Sherlock(int riga, int colonna, int contaT, int valAt);
 bool TrovaRiga(int riga);
 int* FormattaMatrix(int riga);
 int SherlockPack(int riga, int colonna, int contaT, int valAt);
+void StampaMatrice(int** matrix, string nome);
 
-//***************VARIABILI*****************
-
+//***************************************VARIABILI******************************************
 int serate, momenti, travestimenti;
 int** matrice;
 int** newMatrice;
 int istanti = 0;
 int contaSerateTolte = 0;
+//******************************************************************************************
 
-// IL VALORE 1 CORRISPONDE A J
-// IL VALORE 0 CORRISPONDE A H
-
-//***************FUNZIONI******************
 int main(){
 	//inizializza tutto
 	RobertDowneyJr();
@@ -33,46 +33,39 @@ int main(){
 	cout<<"N:"<<serate<<" m:"<<momenti<<" t:"<<travestimenti<<endl;
 	cout<<"0->H - 1->J"<<endl<<endl;
 
-	cout<<"MATRICE:"<<endl;
-	for(int i = 0; i < serate; i++){
-		for(int j = 0; j < momenti; j++){
-			cout<<matrice[i][j]<<" ";
-		}
-		cout<<endl;
-	}
-
-	cout<<endl<<"NEW MATRICE"<<endl;
-	for(int i = 0; i < serate-contaSerateTolte; i++){
-		for(int j = 0; j < momenti; j++){
-			cout<<newMatrice[i][j]<<" ";
-		}
-		cout<<endl;
-	}
+	StampaMatrice(matrice,"MATRICE");
+	cout<<"istanti prima:"<<istanti<<endl<<endl;
+	StampaMatrice(newMatrice,"NEW MATRICE");
 
 	//FORMATTO LA MATRICE
 	for(int i = 0; i < serate - contaSerateTolte; i++){
 		newMatrice[i] = FormattaMatrix(i);
 	}
 
-	cout<<endl<<"istanti prima:"<<istanti<<endl;
-
-	cout<<endl<<"MATRICE FORMATTATA"<<endl;
-	for(int i = 0; i < serate-contaSerateTolte; i++){
-		for(int j = 0; j < momenti; j++){
-			cout<<newMatrice[i][j]<<" ";
-		}
-		cout<<endl;
-	}
+	StampaMatrice(newMatrice,"MATRICE FORMATTATA");
 
 	//CHIAMO IL METODO PER RISOLVERE L'ALGORITMO
 	istanti += SherlockPack(0,0,0,-1);	
 
-	cout<<endl<<"istanti:"<<istanti<<endl;
+	cout<<"istanti:"<<istanti<<endl;
 
 	ofstream out("output.txt");
 	out<<istanti;
 	
 	return 0;
+}
+
+//***************************************FUNZIONI******************************************
+
+void StampaMatrice(int** matrix, string nome){
+	cout<<nome<<endl;
+	for(int i = 0; i < serate - contaSerateTolte; i++){
+		for(int j = 0; j < momenti; j++){
+			cout<<matrix[i][j]<<" ";
+		}
+		cout<<endl;
+	}
+	cout<<endl;
 }
 
 //inizializza
@@ -349,3 +342,4 @@ void mergesort(int* v, int start, int end){
     merge(v,start,center,end);
   }
 }
+//******************************************************************************************
