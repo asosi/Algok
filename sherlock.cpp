@@ -1,10 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-
-
 using namespace std;
-
 
 //****************HEADER*******************
 void RobertDowneyJr();
@@ -16,13 +13,11 @@ int Sherlock(int riga, int colonna, int contaT, int valAt);
 bool TrovaRiga(int riga);
 int* FormattaMatrix(int riga);
 int SherlockPack(int riga, int colonna, int contaT, int valAt);
-bool TrovaRigaMezza(int riga);
 
 //***************VARIABILI*****************
 
 int serate, momenti, travestimenti;
 int** matrice;
-int contaStampa;
 int** newMatrice;
 int istanti = 0;
 int contaSerateTolte = 0;
@@ -32,9 +27,21 @@ int contaSerateTolte = 0;
 
 //***************FUNZIONI******************
 int main(){
+	//inizializza tutto
 	RobertDowneyJr();
 
-	cout<<"NEW MATRICE"<<endl;
+	cout<<"N:"<<serate<<" m:"<<momenti<<" t:"<<travestimenti<<endl;
+	cout<<"0->H - 1->J"<<endl<<endl;
+
+	cout<<"MATRICE:"<<endl;
+	for(int i = 0; i < serate; i++){
+		for(int j = 0; j < momenti; j++){
+			cout<<matrice[i][j]<<" ";
+		}
+		cout<<endl;
+	}
+
+	cout<<endl<<"NEW MATRICE"<<endl;
 	for(int i = 0; i < serate-contaSerateTolte; i++){
 		for(int j = 0; j < momenti; j++){
 			cout<<newMatrice[i][j]<<" ";
@@ -42,11 +49,7 @@ int main(){
 		cout<<endl;
 	}
 
-	//istanti = ElementareWatson();
-	//if(travestimenti!=0)
-	//	istanti += Sherlock(0,0,0,-1);
-
-
+	//FORMATTO LA MATRICE
 	for(int i = 0; i < serate - contaSerateTolte; i++){
 		newMatrice[i] = FormattaMatrix(i);
 	}
@@ -61,13 +64,10 @@ int main(){
 		cout<<endl;
 	}
 
-
-	istanti += SherlockPack(0,0,0,-1);
-
-	
+	//CHIAMO IL METODO PER RISOLVERE L'ALGORITMO
+	istanti += SherlockPack(0,0,0,-1);	
 
 	cout<<endl<<"istanti:"<<istanti<<endl;
-
 
 	ofstream out("output.txt");
 	out<<istanti;
@@ -120,19 +120,6 @@ void RobertDowneyJr(){
 			k++;
 		}
 	}
-
-	cout<<"N:"<<serate<<" m:"<<momenti<<" t:"<<travestimenti<<endl;
-	cout<<"0:H 1:J"<<endl<<endl;
-
-	cout<<"Matrice:"<<endl;
-	for(int i = 0; i < serate; i++){
-		for(int j = 0; j < momenti; j++){
-			cout<<matrice[i][j]<<" ";
-		}
-		cout<<endl;
-	}
-	cout<<endl;
-	
 }
 
 //caso base
@@ -172,7 +159,6 @@ int ElementareWatson(){
 	cout<<endl;
 	
 	//ordino vettore
-
 	int* totali = new int[serate*2];
 	for(int i = 0; i < serate*2; i+=2){
 		totali[i] = 0;
@@ -210,14 +196,9 @@ int ElementareWatson(){
 	return soluzione;
 }
 
-//caso complicato:
-/*
-IDEA:
-soluzione dinamica:
-trovare il max(cambio vestito, non cambio vestito) tra tutte le serate tramite una funzione ricorsiva.
-questo finchè non ho esaurito i travestimenti o non sono arrivato alla fine della matrice
-*/
 
+//caso complicato:
+//primo metodo: prende in input direttamente la matrice
 int Sherlock(int riga, int colonna, int contaT, int valAt){
 
 	if(colonna == momenti){
@@ -253,7 +234,7 @@ int Sherlock(int riga, int colonna, int contaT, int valAt){
 
 	}
 }
-
+//secondo metodo: prende in input la matrice formattata
 int SherlockPack(int riga, int colonna, int contaT, int valAt){
 	
 	if(newMatrice[riga][colonna] == 0 || colonna == momenti){
@@ -288,6 +269,7 @@ int SherlockPack(int riga, int colonna, int contaT, int valAt){
 	}
 }
 
+
 //metodo che formatta le righe della matrice es. 0001111 -> 34
 int* FormattaMatrix(int riga){
 	int* array = new int[momenti];
@@ -321,7 +303,7 @@ bool TrovaRiga(int riga){
 	return true;
 }
 
-//calcola il massimo tra due inter
+//trova il massimo tra due interi
 int Max(int i, int j){
 	if(i>j)
 		return i;
@@ -367,4 +349,3 @@ void mergesort(int* v, int start, int end){
     merge(v,start,center,end);
   }
 }
-
