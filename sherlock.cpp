@@ -29,7 +29,7 @@ void StampaMatrice(int** matrix, string nome);
 void StampaVector(vector<int> v, string nome);
 void Sherlock_markII();
 int SommaElementi(vector<int> v);
-
+void Ironman();
 //***************************************VARIABILI******************************************
 int serate, momenti, travestimenti;
 int veritravestimenti; //si potra togliere questa riga
@@ -38,8 +38,7 @@ int** newMatrice;
 int istanti = 0;
 int contaSerateTolte = 0;
 Serata** listaSerate;
-
-
+vector<int>* notte;
 //*****************************************************************************************
 
 int main(){
@@ -62,7 +61,7 @@ int main(){
 	//CHIAMO IL METODO PER RISOLVERE L'ALGORITMO
 	//istanti += SherlockPack(0,0,0,-1);	
 	Sherlock_markII();
-
+	Ironman();
 	int sommatoria = contaSerateTolte;
 	for(int i=0; i<serate-contaSerateTolte;i++)
 	sommatoria+= listaSerate[i]->scambi;
@@ -342,9 +341,11 @@ void Sherlock_markII(){
 		int maxJ = SommaElementi(listaSerate[i]->j);
 		if(maxH > maxJ){
 			listaSerate[i]->peso = maxH;
+			listaSerate[i]->inizio = 0;
 		}
 		else{				
 			listaSerate[i]->peso = maxJ;
+			listaSerate[i]->inizio = 1;
 		}
 	}
 
@@ -458,5 +459,33 @@ void mergesort(Serata** v, int start, int end){
     mergesort(v,center+1,end);
     merge(v,start,center,end);
   }
+}
+
+void Ironman(){
+	notte = new vector<int>[serate-contaSerateTolte];
+	for(int i=0; i<serate-contaSerateTolte; i++){
+		if(listaSerate[i]->inizio==0){
+			for(int k=0; k<listaSerate[i]->j.size(); k++){
+				notte[i].push_back(0-listaSerate[i]->h[k]);
+				notte[i].push_back(listaSerate[i]->j[k]);
+			}
+			if(listaSerate[i]->h.size()>listaSerate[i]->j.size())
+				notte[i].push_back(0-listaSerate[i]->h[listaSerate[i]->h.size()-1]);
+		}
+		else{
+			for(int k=0; k<listaSerate[i]->h.size(); k++){
+				notte[i].push_back(0-listaSerate[i]->j[k]);
+				notte[i].push_back(listaSerate[i]->h[k]);
+			}
+			if(listaSerate[i]->j.size()>listaSerate[i]->h.size())
+				notte[i].push_back(0-listaSerate[i]->j[listaSerate[i]->j.size()-1]);	
+		}
+	}
+	for(int i=0; i<serate-contaSerateTolte; i++){
+		for(int k=0; k<notte[i].size(); k++){
+			cout << notte[i][k] << " ";
+		}
+		cout << endl;
+	}
 }
 //******************************************************************************************
