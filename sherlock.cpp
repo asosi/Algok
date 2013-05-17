@@ -26,7 +26,6 @@ int SherlockPack(int riga, int colonna, int contaT, int valAt);
 void StampaMatrice(int** matrix, string nome);
 void StampaVector(vector<int> v, string nome);
 void Sherlock_markII();
-int SommaElementi(vector<int> v);
 
 //***************************************VARIABILI******************************************
 int serate, momenti, travestimenti;
@@ -70,6 +69,7 @@ int main(){
 }
 
 //***************************************FUNZIONI******************************************
+
 void StampaMatrice(int** matrix, string nome){
 
 	int k;
@@ -313,55 +313,11 @@ void Sherlock_markII(){
 	}	
 
 	for(int i = 0; i < serate-contaSerateTolte; i++){
-		cout<<"SEARATA "<<i<<" scambi:"<<listaSerate[i]->scambi<<endl;
+		cout<<"serata "<<i<<endl;
 		StampaVector(listaSerate[i]->h,"h: ");
 		StampaVector(listaSerate[i]->j,"j: ");
 		cout<<endl;
 	}
-
-	//RICHIAMATA METODO CHE ORDINA LE SERATE PER NUMERO DI SCAMBI
-
-	vector<int> massimi;
-	massimi.resize(serate-contaSerateTolte);
-
-	int max = 0;
-	for(int i = serate-contaSerateTolte-1; i > -1; i--){
-		cout<<"A"<<endl;
-		int maxH = SommaElementi(listaSerate[i]->h);
-		int maxJ = SommaElementi(listaSerate[i]->j);
-		cout<<"B"<<endl;
-		if(maxH >= max || maxJ >= max){
-			if(maxH > maxJ){
-				max = maxH;
-				massimi.push_back(maxH);
-			}
-			else{				
-				max = maxJ;
-				massimi.push_back(maxJ);
-			}
-		}
-	}
-
-	StampaVector(massimi,"massimi: ");
-	cout<<endl<<"max:"<<max<<endl;
-
-	for(int i = massimi.size()-1; i > -1; i--){
-		if(travestimenti!=0){
-			cout<<massimi[i]<<endl;
-			istanti += massimi[i];
-			travestimenti--;
-		}
-	}
-
-
-}
-
-int SommaElementi(vector<int> v){
-	int sommaRiga = 0;
-	for(int i = 0; i < v.size(); i++){
-		sommaRiga += v[i];
-	}
-	return sommaRiga;
 }
 
 //metodo che formatta le righe della matrice es. 0001111 -> 34
@@ -397,7 +353,7 @@ bool TrovaRiga(int riga){
 	return true;
 }
 
-//metodo che trova il massimo tra due interi
+//trova il massimo tra due interi
 int Max(int i, int j){
 	if(i>j)
 		return i;
