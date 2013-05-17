@@ -63,14 +63,15 @@ int main(){
 	//istanti += SherlockPack(0,0,0,-1);	
 	Sherlock_markII();
 
-	cout<<"istanti:"<<istanti<<endl;
-
-	ofstream out("output.txt");
-	out<<istanti;
 	int sommatoria = contaSerateTolte;
 	for(int i=0; i<serate-contaSerateTolte;i++)
-		sommatoria+= listaSerate[i]->scambi;
+	sommatoria+= listaSerate[i]->scambi;
 	cout<<"MI SERVONO MASSIMO "<< sommatoria << " SCAMBI, E NE HO " << veritravestimenti <<"\n";
+	if(sommatoria==veritravestimenti)
+		istanti = (serate)*(momenti);
+	cout<<"istanti:"<<istanti<<endl;
+	ofstream out("output.txt");
+	out<<istanti;
 	return 0;
 }
 
