@@ -3,6 +3,7 @@
 #include <vector>
 using namespace std;
 
+
 // IL VALORE 1 CORRISPONDE A J
 // IL VALORE 0 CORRISPONDE A H
 
