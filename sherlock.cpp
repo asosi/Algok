@@ -476,19 +476,19 @@ void Ironman(){
 		if(listaSerate[i]->scambi != 1){
 			if(listaSerate[i]->inizio==0){
 				for(int k=0; k<listaSerate[i]->j.size(); k++){
-					notte[x].push_back(0-listaSerate[i]->h[k]);
-					notte[x].push_back(listaSerate[i]->j[k]);
+					notte[x].push_back(listaSerate[i]->h[k]);
+					notte[x].push_back(0-listaSerate[i]->j[k]);
 				}
 				if(listaSerate[i]->h.size()>listaSerate[i]->j.size())
-					notte[x].push_back(0-listaSerate[i]->h[listaSerate[i]->h.size()-1]);
+					notte[x].push_back(listaSerate[i]->h[listaSerate[i]->h.size()-1]);
 			}
 			else{
 				for(int k=0; k<listaSerate[i]->h.size(); k++){
-					notte[x].push_back(0-listaSerate[i]->j[k]);
-					notte[x].push_back(listaSerate[i]->h[k]);
+					notte[x].push_back(listaSerate[i]->j[k]);
+					notte[x].push_back(0-listaSerate[i]->h[k]);
 				}
 				if(listaSerate[i]->j.size()>listaSerate[i]->h.size())
-					notte[x].push_back(0-listaSerate[i]->j[listaSerate[i]->j.size()-1]);	
+					notte[x].push_back(listaSerate[i]->j[listaSerate[i]->j.size()-1]);	
 			}
 			x++;
 		}
