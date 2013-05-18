@@ -29,7 +29,12 @@ void StampaMatrice(int** matrix, string nome);
 void StampaVector(vector<int> v, string nome);
 void Sherlock_markII();
 int SommaElementi(vector<int> v);
+int SommaElementi2(vector<int> v);
 void Ironman();
+void WarMachine();
+
+void InvertiSegni(int riga, int colonna);
+void CalcolaSomma();
 //***************************************VARIABILI******************************************
 int serate, momenti, travestimenti;
 int veritravestimenti; //si potra togliere questa riga
@@ -39,7 +44,15 @@ int istanti = 0;
 int contaSerateTolte = 0;
 Serata** listaSerate;
 vector<int>* notte;
+vector<int>* notteIniziale;
 int dimnotte;
+int sommaFinale = 0;
+int contaFine = 0;
+int travestimentiInizio;
+int posx = 0;
+int posy = 0;
+int posxIni;
+int posyIni;
 //*****************************************************************************************
 
 int main(){
@@ -62,13 +75,36 @@ int main(){
 	//CHIAMO IL METODO PER RISOLVERE L'ALGORITMO
 	//istanti += SherlockPack(0,0,0,-1);	
 	Sherlock_markII();
+	cout<<"istanti dopo sherlock:"<<istanti<<endl<<endl;
+	
+
 	Ironman();
-	int sommatoria = contaSerateTolte;
-	for(int i=0; i<serate-contaSerateTolte;i++)
-	sommatoria+= listaSerate[i]->scambi;
-	cout<<"MI SERVONO MASSIMO "<< sommatoria << " SCAMBI, E NE HO " << veritravestimenti <<"\n";
-	if(sommatoria==veritravestimenti)
-		istanti = (serate)*(momenti);
+	notteIniziale = notte;
+
+	travestimentiInizio = travestimenti;
+	for(int i=0; i<dimnotte; i++){
+		for(int k=0; k<notte[i].size(); k++){
+			if(notte[i][k] < 0)
+				contaFine++;
+		}
+	}
+
+	cout<<travestimenti<<endl;
+	if(travestimenti>0){
+		CalcolaSomma();
+		WarMachine();
+	}
+
+
+	//int sommatoria = contaSerateTolte;
+	//for(int i=0; i<serate-contaSerateTolte;i++)
+	//sommatoria+= listaSerate[i]->scambi;
+	//cout<<"MI SERVONO MASSIMO "<< sommatoria << " SCAMBI, E NE HO " << veritravestimenti <<"\n";
+	//if(sommatoria==veritravestimenti)
+	//	istanti = (serate)*(momenti);
+
+	//istanti += sommaFinale;
+
 	cout<<"istanti:"<<istanti<<endl;
 	ofstream out("output.txt");
 	out<<istanti;
@@ -350,17 +386,25 @@ void Sherlock_markII(){
 
 	for(int i = 0; i < massimi.size(); i++){
 		if(massimi[i]!=0)
-		if(travestimenti!=0){
+		if(travestimenti>0){
 			//cout<<massimi[i]<<endl;
 			istanti += massimi[i];
 			travestimenti--;
 		}
 	}
+	
 }
 
 int SommaElementi(vector<int> v){
 	int somma = 0;
 	for(int i = 0; i < v.size(); i++)
+		somma += v[i];
+	return somma;
+}
+int SommaElementi2(vector<int> v){
+	int somma = 0;
+	for(int i = 0; i < v.size(); i++)
+		if(v[i]>0)
 		somma += v[i];
 	return somma;
 }
@@ -483,4 +527,89 @@ void Ironman(){
 		cout << endl;
 	}
 }
+
+void WarMachine(){
+	if(contaFine>0){
+		if(travestimenti>1){
+			for(int i=posx; i<dimnotte; i++){
+				for(int k=0; k<notte[i].size(); k++){
+					if(notte[i][k]<0){
+						if(travestimenti == travestimentiInizio){
+							posxIni = i;
+							posyIni = k;
+						}
+						
+						posx = i;
+						posy = k;
+						i = dimnotte;
+						k = notte[i].size();		
+					}
+				}
+			}		
+		}
+		else 
+			if(travestimenti>0){		
+			for(int i=posx; i<dimnotte; i++){
+				for(int k=notte[i].size(); k>0; k--){
+					if(notte[i][k]<0){
+						if(travestimenti == travestimentiInizio){
+							posxIni = i;
+							posyIni = k;
+						}
+							posx = i;
+							posy = k;
+							i = dimnotte;
+							k = 0;			
+						}
+					}
+				}
+			}	
+
+		travestimenti--;
+		if(travestimenti>=0){
+			InvertiSegni(posx,posy);
+
+			for(int i=0; i<dimnotte; i++){
+				for(int k=0; k<notte[i].size(); k++){
+					cout << notte[i][k] << " ";
+				}
+				cout << endl;
+			}
+
+			CalcolaSomma();
+			WarMachine();
+		}
+	}
+}
+
+void InvertiSegni(int riga, int colonna){
+	for(int k=colonna; k<notte[riga].size()+1; k++){
+			notte[riga][k] = 0-notte[riga][k];
+	}
+}
+
+void CalcolaSomma(){
+	int somma = 0;
+
+	for(int i=0; i<dimnotte; i++){
+		for(int k=0; k<notte[i].size(); k++){
+			if(notte[i][k]>0){
+				somma += notte[i][k];
+			}
+		}
+	}
+	if(somma>sommaFinale)
+		sommaFinale = somma;	
+
+	if(travestimenti==0){
+		notteIniziale[posxIni][posyIni] = 0;	
+		notte = notteIniziale;
+		travestimenti = travestimentiInizio;
+		contaFine--;
+		istanti = sommaFinale;
+	}
+
+	cout<<"SOMMA:"<<somma<<" sommaFinale:"<<sommaFinale<<endl;
+}
+
 //******************************************************************************************
