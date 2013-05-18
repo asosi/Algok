@@ -318,23 +318,6 @@ void Sherlock_markII(){
 			}		
 		}
 	}	
-/*
-	for(int i = 0; i < serate-contaSerateTolte; i++){
-		cout<<"serata "<<i<<endl;
-		StampaVector(listaSerate[i]->h,"h: ");
-		StampaVector(listaSerate[i]->j,"j: ");
-		cout<<endl;
-	}
-*/
-	//cout << "ORDINO MA CONTROLLA SIA ORDINATO DAL BON!!!\n";
-	/*
-	for(int i = 0; i < serate-contaSerateTolte; i++){
-		cout<<"serata "<<i<<endl;
-		//StampaVector(listaSerate[i]->h,"h: ");
-		//StampaVector(listaSerate[i]->j,"j: ");
-		//cout<<endl;
-	}
-	*/
 	vector<int> massimi;
 
 	for(int i = serate-contaSerateTolte-1; i > -1; i--){
