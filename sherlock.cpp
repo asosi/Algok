@@ -51,6 +51,9 @@ vector<int>* notteIniziale;
 int dimnotte;
 int sommaFinale = 0;
 int travestimentiInizio;
+int istantiSherlock = 0;
+
+int travestimentiSherlock;
 
 int nValoriNeg;
 int contaValNeg;
@@ -76,14 +79,16 @@ int main(){
 
 	//CHIAMO IL METODO PER RISOLVERE L'ALGORITMO
 	//istanti += SherlockPack(0,0,0,-1);	
+		cout<<"travestimenti prima di sherlock:"<<travestimenti<<endl;
+		travestimentiSherlock = travestimenti;
 	Sherlock_markII();
-	cout<<"istanti dopo sherlock:"<<istanti<<endl<<endl;
+		cout<<"travestimenti dopo sherlock:"<<travestimenti<<endl;
+	//cout<<"istanti dopo sherlock:"<<istanti<<endl<<endl;
 	
 
 	Ironman();
 	notteIniziale = notte;
 
-	travestimentiInizio = travestimenti;
 	for(int i=0; i<dimnotte; i++){
 		for(int k=0; k<notte[i].size(); k++){
 			if(notte[i][k] < 0)
@@ -92,13 +97,20 @@ int main(){
 	}
 
 	contaValNeg = nValoriNeg;
+	
+	travestimenti -= serate;
 
-	cout<<travestimenti<<endl;
-	if(travestimenti>0){
 		cout<<"travestimenti prima di war:"<<travestimenti<<endl;
+	if(travestimenti>0){
 		//CalcolaSomma();
-		istanti = WarMachine2(0,0,0,travestimenti,notte,contaValNeg);
+		int h = CalcolaSomma2();
+		int istanti1 = WarMachine2(0,0,h,travestimenti,notte,contaValNeg);
+
+		cout<<istanti1<<endl;
+		istanti+=istanti1;
 	}
+	else
+		istanti += istantiSherlock;
 
 
 	//int sommatoria = contaSerateTolte;
@@ -391,10 +403,11 @@ void Sherlock_markII(){
 
 	for(int i = 0; i < massimi.size(); i++){
 		if(massimi[i]!=0)
-		if(travestimenti>0){
+		if(travestimentiSherlock>0){
 			//cout<<massimi[i]<<endl;
-			istanti += massimi[i];
-			travestimenti--;
+			istantiSherlock += massimi[i];
+			//cout<<"travestimenti in sherlock:"<<travestimenti<<endl;
+			travestimentiSherlock--;
 		}
 	}
 	
@@ -589,31 +602,30 @@ void WarMachine(){
 */
 int WarMachine2(int Ri, int Ci, int somma, int trav, vector<int>* matrix, int conta){
 
-	//cout<<"valore:"<<matrix[Ri][Ci]<<" travestimenti:"<<trav<<" contaValNeg:"<<conta<<endl;
+	//cout<<"Chiamata"<<" valore:"<<matrix[Ri][Ci]<<" travestimenti:"<<travestimenti<<" somma:"<<somma<<" conta:"<<conta<<endl;
 	int posx,posy;
 	if(conta == 0){
-		cout<<"A"<<" valore:"<<matrix[Ri][Ci]<<" travestimenti:"<<travestimenti<<endl;
+		cout<<"A"<<" valore:"<<matrix[Ri][Ci]<<" travestimenti:"<<travestimenti<<" somma:"<<somma<<" conta:"<<conta<<endl;
 		return somma;
 	}
 	else if(trav == 0){
-		cout<<"B"<<" valore:"<<matrix[Ri][Ci]<<" travestimenti:"<<travestimenti<<endl;
+		cout<<"B"<<" valore:"<<matrix[Ri][Ci]<<" travestimenti:"<<travestimenti<<" somma:"<<somma<<" conta:"<<conta<<endl;
 		return somma;
 	}
 	else{
-		cout<<"C"<<" valore:"<<matrix[Ri][Ci]<<" travestimenti:"<<travestimenti<<endl;
+		//cout<<"C"<<" valore:"<<matrix[Ri][Ci]<<" travestimenti:"<<travestimenti<<" somma:"<<somma<<" conta:"<<conta<<endl;
 		for(int i=Ri; i<dimnotte; i++){
 			for(int k=Ci; k<matrix[i].size(); k++){
 				if(matrix[i][k]<0){
-					//cout<<"valore:"<<matrix[Ri][Ci]<<matrix[i][k]<<" travestimenti:"<<trav<<" contaValNeg:"<<conta<<endl;
+					//cout<<"TROVATO! - valore:"<<matrix[i][k]<<endl;
+					//cout<<"CASO1:"<<" travestimenti:"<<trav-1<<" contaValNeg:"<<conta-1<<endl;
+					//cout<<"CASO2:"<<" travestimenti:"<<trav<<" contaValNeg:"<<conta-1<<endl;
 					posx = i;
 					posy = k;
 					vector<int>* matrix1 = matrix;
 					matrix1 = InvertiSegni(posx,posy,matrix1);
 					int somma1 = CalcolaSomma2();
-					return Max(WarMachine2(posx,posy,somma1,trav-1,matrix1, conta-1),WarMachine2(posx,posy,somma,trav,matrix,conta-1));
-				}
-				else{
-					cout<<">0"<<endl;
+					return Max(WarMachine2(posx,posy,somma1,--trav,matrix1, --conta),WarMachine2(posx,posy,somma,trav,matrix,--conta));
 				}
 			}
 		}
@@ -661,7 +673,7 @@ int CalcolaSomma2(){
 			}
 		}
 	}	
-	cout<<"somma:"<<somma<<endl;
+	//cout<<"somma:"<<somma<<endl;
 	return somma;
 }
 
