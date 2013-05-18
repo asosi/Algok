@@ -33,9 +33,11 @@ int SommaElementi(vector<int> v);
 int SommaElementi2(vector<int> v);
 void Ironman();
 void WarMachine();
+int WarMachine2(int Ri, int Ci, int somma, int trav,vector<int>* matrix, int conta);
 
-void InvertiSegni(int riga, int colonna);
+vector<int>* InvertiSegni(int riga, int colonna,vector<int>* matrix);
 void CalcolaSomma();
+int CalcolaSomma2();
 //***************************************VARIABILI******************************************
 int serate, momenti, travestimenti;
 int veritravestimenti; //si potra togliere questa riga
@@ -48,12 +50,11 @@ vector<int>* notte;
 vector<int>* notteIniziale;
 int dimnotte;
 int sommaFinale = 0;
-int contaFine = 0;
 int travestimentiInizio;
-int posx = 0;
-int posy = 0;
-int posxIni;
-int posyIni;
+
+int nValoriNeg;
+int contaValNeg;
+
 //*****************************************************************************************
 
 int main(){
@@ -86,14 +87,17 @@ int main(){
 	for(int i=0; i<dimnotte; i++){
 		for(int k=0; k<notte[i].size(); k++){
 			if(notte[i][k] < 0)
-				contaFine++;
+				nValoriNeg++;
 		}
 	}
 
+	contaValNeg = nValoriNeg;
+
 	cout<<travestimenti<<endl;
 	if(travestimenti>0){
-		CalcolaSomma();
-		WarMachine();
+		cout<<"travestimenti prima di war:"<<travestimenti<<endl;
+		//CalcolaSomma();
+		istanti = WarMachine2(0,0,0,travestimenti,notte,contaValNeg);
 	}
 
 
@@ -528,7 +532,7 @@ void Ironman(){
 		cout << endl;
 	}
 }
-
+/*
 void WarMachine(){
 	if(contaFine>0){
 		if(travestimenti>1){
@@ -582,13 +586,47 @@ void WarMachine(){
 		}
 	}
 }
+*/
+int WarMachine2(int Ri, int Ci, int somma, int trav, vector<int>* matrix, int conta){
 
-void InvertiSegni(int riga, int colonna){
-	for(int k=colonna; k<notte[riga].size()+1; k++){
-			notte[riga][k] = 0-notte[riga][k];
+	//cout<<"valore:"<<matrix[Ri][Ci]<<" travestimenti:"<<trav<<" contaValNeg:"<<conta<<endl;
+	int posx,posy;
+	if(conta == 0){
+		cout<<"A"<<" valore:"<<matrix[Ri][Ci]<<" travestimenti:"<<travestimenti<<endl;
+		return somma;
+	}
+	else if(trav == 0){
+		cout<<"B"<<" valore:"<<matrix[Ri][Ci]<<" travestimenti:"<<travestimenti<<endl;
+		return somma;
+	}
+	else{
+		cout<<"C"<<" valore:"<<matrix[Ri][Ci]<<" travestimenti:"<<travestimenti<<endl;
+		for(int i=Ri; i<dimnotte; i++){
+			for(int k=Ci; k<matrix[i].size(); k++){
+				if(matrix[i][k]<0){
+					//cout<<"valore:"<<matrix[Ri][Ci]<<matrix[i][k]<<" travestimenti:"<<trav<<" contaValNeg:"<<conta<<endl;
+					posx = i;
+					posy = k;
+					vector<int>* matrix1 = matrix;
+					matrix1 = InvertiSegni(posx,posy,matrix1);
+					int somma1 = CalcolaSomma2();
+					return Max(WarMachine2(posx,posy,somma1,trav-1,matrix1, conta-1),WarMachine2(posx,posy,somma,trav,matrix,conta-1));
+				}
+				else{
+					cout<<">0"<<endl;
+				}
+			}
+		}
 	}
 }
 
+vector<int>* InvertiSegni(int riga, int colonna,vector<int>* matrix){
+	for(int k=colonna; k<matrix[riga].size()+1; k++){
+		matrix[riga][k] = 0-matrix[riga][k];
+	}
+	return matrix;
+}
+/*
 void CalcolaSomma(){
 	int somma = 0;
 
@@ -611,6 +649,20 @@ void CalcolaSomma(){
 	}
 
 	cout<<"SOMMA:"<<somma<<" sommaFinale:"<<sommaFinale<<endl;
+}
+*/
+int CalcolaSomma2(){
+	int somma = 0;
+
+	for(int i=0; i<dimnotte; i++){
+		for(int k=0; k<notte[i].size(); k++){
+			if(notte[i][k]>0){
+				somma += notte[i][k];
+			}
+		}
+	}	
+	cout<<"somma:"<<somma<<endl;
+	return somma;
 }
 
 //******************************************************************************************
