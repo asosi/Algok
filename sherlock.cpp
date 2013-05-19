@@ -7,7 +7,7 @@ using namespace std;
 // IL VALORE 1 CORRISPONDE A J
 // IL VALORE 0 CORRISPONDE A H
 
-//***************************************S**STRUCT******************************************
+//******************************************STRUCT******************************************
 struct Serata{
 	int scambi;
 	vector<int> h;
@@ -22,15 +22,16 @@ int ElementareWatson();
 void merge(Serata** v, int start, int center, int end);
 void mergesort(Serata** v, int start, int end);
 int Max(int i, int j);
+
 int Sherlock(int riga, int colonna, int contaT, int valAt);
+int SherlockPack(int riga, int colonna, int contaT, int valAt);
+void Sherlock_markII();
+
 bool TrovaRiga(int riga);
 int* FormattaMatrix(int riga);
-int SherlockPack(int riga, int colonna, int contaT, int valAt);
-void StampaMatrice(int** matrix, string nome);
-void StampaVector(vector<int> v, string nome);
-void Sherlock_markII();
 int SommaElementi(vector<int> v);
 int SommaElementi2(vector<int> v);
+
 void Ironman();
 void WarMachine();
 int WarMachine2(int Ri, int Ci, int somma, int trav,vector<int>* matrix, int conta);
@@ -38,6 +39,11 @@ int WarMachine2(int Ri, int Ci, int somma, int trav,vector<int>* matrix, int con
 vector<int>* InvertiSegni(int riga, int colonna,vector<int>* matrix);
 void CalcolaSomma();
 int CalcolaSomma2();
+
+void StampaMatrice(int** matrix, string nome);
+void StampaVector(vector<int> v, string nome);
+void StampaNotte(vector<int>* matrix, string nome, int somma);
+
 //***************************************VARIABILI******************************************
 int serate, momenti, travestimenti;
 int veritravestimenti; //si potra togliere questa riga
@@ -157,6 +163,18 @@ void StampaVector(vector<int> v, string nome){
 		cout<<v[i]<<" ";
 	}
 	cout<<endl;
+}
+
+void StampaNotte(vector<int>* matrix, string nome, int somma){
+
+	cout<<nome<<endl;
+	for(int i=0; i<dimnotte; i++){
+		for(int k=0; k<matrix[i].size(); k++){
+			cout << matrix[i][k] << " ";
+		}
+		cout << endl;
+	}
+	cout<<"somma:"<<somma<<endl;
 }
 
 //inizializza
@@ -625,6 +643,10 @@ int WarMachine2(int Ri, int Ci, int somma, int trav, vector<int>* matrix, int co
 					vector<int>* matrix1 = matrix;
 					matrix1 = InvertiSegni(posx,posy,matrix1);
 					int somma1 = CalcolaSomma2();
+
+					StampaNotte(matrix1,"matrice senza cambio:",somma1);
+					StampaNotte(matrix,"matrice con cambio:",somma);
+
 					return Max(WarMachine2(posx,posy,somma1,--trav,matrix1, --conta),WarMachine2(posx,posy,somma,trav,matrix,--conta));
 				}
 			}
