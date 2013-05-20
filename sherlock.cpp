@@ -139,7 +139,7 @@ int main(){
 		if(travestimenti>0){
 			int istanti1;
 			for(int i = 0; i < dimnotte; i++){
-				if(notte[i][0] < 0)
+				if(notte[i][0] < 0 && notte[i][0]<notte[i][dimnotte-1])
 					InvertiRiga(i);
 				maxRiga = CalcolaSommaPositiviRiga(i);
 				maxTotale = maxRiga;
