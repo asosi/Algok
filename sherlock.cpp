@@ -81,6 +81,7 @@ vector<Stark*> winterFell;
 
 int maxRiga=0;
 int maxTotale = 0;
+int travestimentiWinter;
 //*****************************************************************************************
 
 int main(){
@@ -142,6 +143,7 @@ int main(){
 					InvertiRiga(i);
 				maxRiga = CalcolaSommaPositiviRiga(i);
 				maxTotale = maxRiga;
+				travestimentiWinter = travestimenti;
 				istanti1 = WarMachine4(i, 0, travestimenti);
 			}
 			cout<<endl<<"Dopo la WarMAchine istanti:"<<istanti1<<endl;
@@ -153,11 +155,12 @@ int main(){
 
 			cout<<endl<<"Prima della winter mi rimangono travestimenti:"<<travestimenti<<endl;
 
+
 			int k = WinterIsComing(0,travestimenti);
 			cout<<istanti1<<endl;
 			istanti+=istanti1;
 
-			//k += istantiSherlock;
+			k += istantiSherlock;
 
 			cout<<"****************************************************************";
 			cout<<endl<<k<<endl;
@@ -505,7 +508,9 @@ int WarMachine4(int Ri, int Ci, int trav){
 
 			if(maxT > maxTotale){
 				maxTotale = maxT;
-				winterFell.push_back(new Stark(travestimenti-trav,maxTotale - maxRiga));
+				winterFell.push_back(new Stark(travestimentiWinter-trav,maxTotale - maxRiga));
+				maxRiga = maxTotale;
+				travestimentiWinter = trav;
 			}
 
 			//cout<<"max:"<<max<<" trav:"<<trav<<endl;
