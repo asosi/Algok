@@ -16,35 +16,45 @@ struct Serata{
 	int inizio;
 };
 
+class Stark{
+public:
+	int guadagno;
+	int costo;
+
+	Stark(int g, int c){
+		guadagno = c;
+		costo = g;
+	}
+};
+
 //****************************************HEADER********************************************
 void RobertDowneyJr();
-int ElementareWatson();
 void merge(Serata** v, int start, int center, int end);
 void mergesort(Serata** v, int start, int end);
 int Max(int i, int j);
 
-int Sherlock(int riga, int colonna, int contaT, int valAt);
-int SherlockPack(int riga, int colonna, int contaT, int valAt);
 void Sherlock_markII();
 
 bool TrovaRiga(int riga);
 int* FormattaMatrix(int riga);
 int SommaElementi(vector<int> v);
-int SommaElementi2(vector<int> v);
 
 void Ironman();
-int WarMachine2(int Ri, int Ci, int somma, int trav,vector<int>* matrix, int conta);
-int WarMachine3(int Ri, int Ci, int somma, int trav, int** matrix, int conta);
+int WarMachine4(int Ri, int Ci, int trav);
 
-//vector<int>* InvertiSegni(int riga, int colonna,vector<int>* matrix);
-int** InvertiSegni(int riga, int colonna,int** matrix);
-//int CalcolaSomma2();
+void InvertiSegni2(int riga, int colonna);
+void InvertiRiga(int riga);
 int CalcolaSomma2(int** matrix);
 
 void StampaMatrice(int** matrix, string nome);
 void StampaVector(vector<int> v, string nome);
 void StampaNotte(vector<int>* matrix, string nome, int somma);
 
+int CalcolaSommaDX(int riga, int posx);
+int CalcolaSommaPositiviRiga(int riga);
+
+
+int WinterIsComing(int i, int trav);
 //***************************************VARIABILI******************************************
 int serate, momenti, travestimenti;
 int veritravestimenti; //si potra togliere questa riga
@@ -66,6 +76,11 @@ int nValoriNeg;
 int contaValNeg;
 
 int rigaMax = 0;
+vector<int> sommeMax;
+vector<Stark*> winterFell;
+
+int maxRiga=0;
+int maxTotale = 0;
 //*****************************************************************************************
 
 int main(){
@@ -74,101 +89,95 @@ int main(){
 
 	cout<<"N:"<<serate<<" m:"<<momenti<<" t:"<<travestimenti<<endl;
 	cout<<"0->H - 1->J"<<endl<<endl;
-	//StampaMatrice(matrice,"MATRICE");
 	cout<<"istanti prima:"<<istanti<<endl<<endl;
-	//StampaMatrice(newMatrice,"NEW MATRICE");
 
 	//FORMATTO LA MATRICE
 	for(int i = 0; i < serate - contaSerateTolte; i++){
 		newMatrice[i] = FormattaMatrix(i);
 	}
 
-	//StampaMatrice(newMatrice,"MATRICE FORMATTATA");
-
 	//CHIAMO IL METODO PER RISOLVERE L'ALGORITMO
-	//istanti += SherlockPack(0,0,0,-1);	
 		cout<<"travestimenti prima di sherlock:"<<travestimenti<<endl;
 		travestimentiSherlock = travestimenti;
-	Sherlock_markII();
+		Sherlock_markII();
 		cout<<"travestimenti dopo sherlock:"<<travestimenti<<endl;
 	//cout<<"istanti dopo sherlock:"<<istanti<<endl<<endl;
 	
 
-	Ironman();
-	notteIniziale = notte;
+	//calcolo il numero di travestimenti necessari, se = travestimenti che ho, esco e restituisco il totale
+	int sommatoria = contaSerateTolte;
+	for(int i=0; i<serate-contaSerateTolte;i++)
+	sommatoria+= listaSerate[i]->scambi;
+	cout<<"MI SERVONO MASSIMO "<< sommatoria << " SCAMBI, E NE HO " << veritravestimenti <<"\n";
+	if(sommatoria==veritravestimenti)
+		istanti = (serate)*(momenti);
 
-	for(int i=0; i<dimnotte; i++){
-		for(int k=0; k<notte[i].size(); k++){
-			if(notte[i][k] < 0)
-				nValoriNeg++;
-		}
+	if(sommatoria == veritravestimenti){
+		int kistanti = istanti;
+		kistanti += sommaFinale;
+		ofstream out("output.txt");
+		out<<kistanti;
+		return 0;
 	}
-
-	contaValNeg = nValoriNeg;
-	
-	travestimenti -= serate;
-
-		cout<<"travestimenti prima di war:"<<travestimenti<<endl;
-	if(travestimenti>0){
-		//CalcolaSomma();
-		int** matrix; 
-		matrix = new int*[dimnotte];
-
+	else{
+		Ironman();
+		notteIniziale = notte;
 
 		for(int i=0; i<dimnotte; i++){
-			if(notte[i].size()>rigaMax)
-				rigaMax = notte[i].size();
-		}
-
-		for(int i = 0; i < dimnotte; i++){
-			matrix[i] = new int[rigaMax];
-		}
-
-		for(int i = 0; i < dimnotte; i++){
-			for(int j = 0; j < rigaMax; j++){
-				matrix[i][j] = 0;
+			for(int k=0; k<notte[i].size(); k++){
+				if(notte[i][k] < 0)
+					nValoriNeg++;
 			}
 		}
 
-		cout<<"dimnotte:"<<dimnotte<<"rigaMax:"<<rigaMax<<endl;
+		contaValNeg = nValoriNeg;
+		
+		travestimenti -= serate;
 
-		StampaNotte(notte,"notte:",0);
-
-		for(int i = 0; i < dimnotte; i++){
-			for(int j = 0; j < notte[i].size(); j++){
-				matrix[i][j] = notte[i][j];
+		cout<<"travestimenti prima di war:"<<travestimenti<<endl;
+		if(travestimenti>0){
+			int istanti1;
+			for(int i = 0; i < dimnotte; i++){
+				if(notte[i][0] < 0)
+					InvertiRiga(i);
+				maxRiga = CalcolaSommaPositiviRiga(i);
+				maxTotale = maxRiga;
+				istanti1 = WarMachine4(i, 0, travestimenti);
 			}
+			cout<<endl<<"Dopo la WarMAchine istanti:"<<istanti1<<endl;
+
+			cout<<endl<<"winterFell:"<<endl;
+			for(int i = 0; i < winterFell.size(); i++){
+				cout<<"array "<<i<<": max:"<<winterFell[i]->guadagno<<" vestiti:"<<winterFell[i]->costo<<endl;
+			}
+
+			cout<<endl<<"Prima della winter mi rimangono travestimenti:"<<travestimenti<<endl;
+
+			int k = WinterIsComing(0,travestimenti);
+			cout<<istanti1<<endl;
+			istanti+=istanti1;
+
+			//k += istantiSherlock;
+
+			cout<<"****************************************************************";
+			cout<<endl<<k<<endl;
+			cout<<"****************************************************************";
+			cout<<endl;
+
+			ofstream out("output.txt");
+			out<<k;
+			return 0;
+
+		}
+		else
+			istanti += istantiSherlock;
+
+			cout<<"istanti:"<<istanti<<endl;
+			ofstream out("output.txt");
+			out<<istanti;
+			return 0;
 		}
 
-		for(int i = 0; i < dimnotte; i++){
-			for(int j = 0; j < rigaMax; j++){
-				cout<<matrix[i][j]<<" ";
-			}cout<<endl;
-		}
-
-		int h = CalcolaSomma2(matrix);
-		int istanti1 = WarMachine3(0,0,h,travestimenti,matrix,contaValNeg);
-
-		cout<<istanti1<<endl;
-		istanti+=istanti1;
-	}
-	else
-		istanti += istantiSherlock;
-
-
-	//int sommatoria = contaSerateTolte;
-	//for(int i=0; i<serate-contaSerateTolte;i++)
-	//sommatoria+= listaSerate[i]->scambi;
-	//cout<<"MI SERVONO MASSIMO "<< sommatoria << " SCAMBI, E NE HO " << veritravestimenti <<"\n";
-	//if(sommatoria==veritravestimenti)
-	//	istanti = (serate)*(momenti);
-
-	//istanti += sommaFinale;
-
-	cout<<"istanti:"<<istanti<<endl;
-	ofstream out("output.txt");
-	out<<istanti;
-	return 0;
 }
 
 //***************************************FUNZIONI******************************************
@@ -260,153 +269,6 @@ void RobertDowneyJr(){
 	}
 }
 
-//caso base
-int ElementareWatson(){
-	vector<int> contaJ;
-	vector<int> contaH;
-	
-	int coH =0; 
-	int coJ = 0;
-
-	for(int i = 0; i < serate; i++){
-		for(int j = 0; j < momenti; j++){
-			if(matrice[i][j] == 0)
-				coH++;
-			else
-				coJ++;
-			if(j == momenti-1){
-				contaJ.push_back(coJ);
-				contaH.push_back(coH);
-			}
-		}
-		coH = 0;
-		coJ = 0;
-	}
-
-	
-	cout<<"stampo numero H"<<endl;
-	for(int i = 0; i < contaH.size(); i++){
-		cout<<contaH[i]<<" ";
-	}
-
-	cout<<endl<<"stampo numero J"<<endl;
-	for(int i = 0; i < contaJ.size(); i++){
-		cout<<contaJ[i]<<" ";
-	}
-
-	cout<<endl;
-	
-	//ordino vettore
-	int* totali = new int[serate*2];
-	for(int i = 0; i < serate*2; i+=2){
-		totali[i] = 0;
-	}
-
- 	int j = 0;
-	for(int i = 0; i < serate*2; i+=2){
-		totali[i] = contaH[j];
-		totali[i+1] = contaJ[j];
-		j++;
-	}
-
-	cout<<"totali:"<<endl;
-	for(int i = 0; i < serate*2; i++){
-		cout<<totali[i]<<" ";
-	}
-	cout<<endl;
-
-	//mergesort(totali,0,(serate*2)-1); [TODO]: creare una merge per gli int se serve
-
-	cout<<"totali ordinati:"<<endl;
-	for(int i = 0; i < serate*2; i++){
-		cout<<totali[i]<<" ";
-	}
-	cout<<endl;
-
-	//calcolo soluzione
-	int soluzione=0;
-
-	for(int i = 0; i < travestimenti; i++){
-		soluzione+=totali[i];
-	}
-
-	cout<<"soluzione:"<<soluzione<<endl;
-	return soluzione;
-}
-
-
-//caso complicato:
-//primo metodo: prende in input direttamente la matrice
-int Sherlock(int riga, int colonna, int contaT, int valAt){
-
-	if(colonna == momenti){
-		if(riga<serate - contaSerateTolte){
-			riga++;
-			colonna = 0;
-			valAt = -1;
-		}
-	}
-
-	//cout<<"valAt"<<valAt<<" riga:"<<riga<<" colonna:"<<colonna<<" contaT:"<<contaT<<endl;
-
-
-	if(riga == serate - contaSerateTolte){
-		return 0;
-	}
-	else if(colonna==momenti){
-		return 0;
-	}
-	if(contaT==travestimenti+1){
-	//cout<<"finito con:"<<contaT<<" travestimenti"<<endl;
-		return 0;
-	}
-	else if(newMatrice[riga][colonna] == valAt){
-		//cout<<"entro"<<endl;
-		return Sherlock(riga,colonna+1,contaT, valAt)+1;
-	}
-	else{
-		if(contaT+1<travestimenti+1)
-			return Max(Sherlock(riga,colonna+1,contaT+1, newMatrice[riga][colonna])+1,Sherlock(riga,colonna+1,contaT,valAt));
-		else
-			Sherlock(riga,colonna+1,contaT,valAt);
-
-	}
-}
-//secondo metodo: prende in input la matrice formattata
-int SherlockPack(int riga, int colonna, int contaT, int valAt){
-	
-	if(newMatrice[riga][colonna] == 0 || colonna == momenti){
-		if(riga<serate - contaSerateTolte){
-			riga++;
-			colonna = 0;
-			valAt = -1;
-		}
-	}
-
-	if(riga == serate - contaSerateTolte){
-		return 0;
-	}
-	else if(colonna==momenti || newMatrice[riga][colonna] == 0 ){
-		return 0;
-	}
-	if(contaT==travestimenti+1){
-	//cout<<"finito con:"<<contaT<<" travestimenti"<<endl;
-		return 0;
-	}
-	else if(colonna%2 == valAt){
-		//cout<<"entro"<<endl;
-		return SherlockPack(riga,colonna+1,contaT, valAt)+ newMatrice[riga][colonna];
-	}
-	else{
-		if(contaT+1<travestimenti+1){
-			return Max(SherlockPack(riga,colonna+1,contaT+1, colonna%2)+newMatrice[riga][colonna],SherlockPack(riga,colonna+1,contaT,valAt));
-		}
-		else{
-			SherlockPack(riga,colonna+1,contaT,valAt);
-		}
-	}
-}
-//terzo metodo: ?
 void Sherlock_markII(){
 	listaSerate = new Serata*[serate-contaSerateTolte];
 	for(int i = 0; i < serate-contaSerateTolte; i++){
@@ -561,6 +423,7 @@ void mergesort(Serata** v, int start, int end){
   }
 }
 
+//mette valori negativi
 void Ironman(){
 	int x = 0;
 	for(int i=0; i<serate-contaSerateTolte; i++){
@@ -583,138 +446,113 @@ void Ironman(){
 			}
 			else{
 				for(int k=0; k<listaSerate[i]->h.size(); k++){
-					notte[x].push_back(listaSerate[i]->j[k]);
 					notte[x].push_back(0-listaSerate[i]->h[k]);
+					notte[x].push_back(listaSerate[i]->j[k]);
 				}
 				if(listaSerate[i]->j.size()>listaSerate[i]->h.size())
 					notte[x].push_back(listaSerate[i]->j[listaSerate[i]->j.size()-1]);	
 			}
 			x++;
 		}
-	}
+	}/*
 	for(int i=0; i<dimnotte; i++){
 		for(int k=0; k<notte[i].size(); k++){
 			cout << notte[i][k] << " ";
 		}
 		cout << endl;
-	}
+	}*/
 }
-/*
-int WarMachine2(int Ri, int Ci, int somma, int trav, vector<int>* matrix, int conta){
 
-	//cout<<"Chiamata"<<" valore:"<<matrix[Ri][Ci]<<" travestimenti:"<<travestimenti<<" somma:"<<somma<<" conta:"<<conta<<endl;
-	int posx,posy;
-	if(conta == 0){
-		cout<<"A"<<" valore:"<<matrix[Ri][Ci]<<" travestimenti:"<<travestimenti<<" somma:"<<somma<<" conta:"<<conta<<endl;
-		return somma;
-	}
-	else if(trav == 0){
-		cout<<"B"<<" valore:"<<matrix[Ri][Ci]<<" travestimenti:"<<travestimenti<<" somma:"<<somma<<" conta:"<<conta<<endl;
-		return somma;
+int WarMachine4(int Ri, int Ci, int trav){
+	int sol = 0;
+	int poY = 0;
+	int primoNeg = -1;
+	int contaN = 0;
+	if(trav == 0){
+		//cout<<"esco"<<endl;
+		return maxTotale;
 	}
 	else{
-		//cout<<"C"<<" valore:"<<matrix[Ri][Ci]<<" travestimenti:"<<travestimenti<<" somma:"<<somma<<" conta:"<<conta<<endl;
-		for(int i=Ri; i<dimnotte; i++){
-			for(int k=Ci; k<matrix[i].size(); k++){
-				if(matrix[i][k]<0){
-					//cout<<"TROVATO! - valore:"<<matrix[i][k]<<endl;
-					//cout<<"CASO1:"<<" travestimenti:"<<trav-1<<" contaValNeg:"<<conta-1<<endl;
-					//cout<<"CASO2:"<<" travestimenti:"<<trav<<" contaValNeg:"<<conta-1<<endl;
-					posx = i;
-					posy = k;
-					vector<int>* matrix1 = matrix;
-					matrix1 = InvertiSegni(posx,posy,matrix1);
-					int somma1 = CalcolaSomma2();
+		for(int i = 0; i < notte[Ri].size(); i++){
+			if(notte[Ri][i]<0){
+				if(primoNeg==-1){
+					//cout<<"entro in quel cazzo di if: e i="<<i<<endl;
+					poY = i;
+					primoNeg++;
+				}
+				contaN++;
+				int soluz = CalcolaSommaDX(Ri,i);
+				//cout<<"sol:"<<sol<<" soluz:"<<soluz<<endl;
 
-					StampaNotte(matrix1,"matrice senza cambio:",somma1);
-					StampaNotte(matrix,"matrice con cambio:",somma);
-
-					return Max(WarMachine2(posx,posy,somma1,--trav,matrix1, --conta),WarMachine2(posx,posy,somma,trav,matrix,--conta));
+				if(sol > soluz){
+					poY = i;
+					sol = soluz;
 				}
 			}
 		}
-	}
-}
-*/
-int WarMachine3(int Ri, int Ci, int somma, int trav, int** matrix, int conta){
 
-	//cout<<"Chiamata"<<" valore:"<<matrix[Ri][Ci]<<" travestimenti:"<<travestimenti<<" somma:"<<somma<<" conta:"<<conta<<endl;
-	int posx,posy;
-	if(conta == 0){
-		cout<<"A"<<" valore:"<<matrix[Ri][Ci]<<" travestimenti:"<<travestimenti<<" somma:"<<somma<<" conta:"<<conta<<endl;
-		return somma;
-	}
-	else if(trav == 0){
-		cout<<"B"<<" valore:"<<matrix[Ri][Ci]<<" travestimenti:"<<travestimenti<<" somma:"<<somma<<" conta:"<<conta<<endl;
-		return somma;
-	}
-	else{
-		//cout<<"C"<<" valore:"<<matrix[Ri][Ci]<<" travestimenti:"<<travestimenti<<" somma:"<<somma<<" conta:"<<conta<<endl;
-		for(int i=Ri; i<dimnotte; i++){
-			for(int k=Ci; k<notte[i].size(); k++){
-				if(matrix[i][k]<0){
+		if(contaN > -1){
+			//cout<<"posy"<<poY<<"primoNeg:"<<primoNeg<<endl;
+			InvertiSegni2(Ri,poY);
 
-					cout<<"*********************************************************************************"<<endl;
-					//cout<<"TROVATO! - valore:"<<matrix[i][k]<<endl;
-					//cout<<"CASO1:"<<" travestimenti:"<<trav-1<<" contaValNeg:"<<conta-1<<endl;
-					//cout<<"CASO2:"<<" travestimenti:"<<trav<<" contaValNeg:"<<conta-1<<endl;
-					posx = i;
-					posy = k;
-					int** matrix1;
+			//cout<<endl;
+			//StampaNotte(notte,"notte:",0);
+			//cout<<endl;
 
-					matrix1 = new int*[dimnotte];
-					for(int j = 0; j < dimnotte; j++){
-						matrix1[j] = new int[rigaMax];
-					}
 
-					for(int j = 0; j < dimnotte; j++)
-						for(int z = 0; z<rigaMax; z++)
-							matrix1[j][z] = matrix[j][z];
+			trav--;
+			int maxT = CalcolaSommaPositiviRiga(Ri);
 
-					matrix1 = InvertiSegni(posx,posy,matrix1);
-					int somma1 = CalcolaSomma2(matrix1);
-/*
-					cout<<endl<<"MATRIX"<<endl;
-					for(int i = 0; i < dimnotte; i++){
-						for(int j = 0; j < rigaMax; j++){
-							cout<<matrix[i][j]<<" ";
-						}cout<<endl;
-					}
-					cout<<endl<<"MATRIX1"<<endl;
-					for(int i = 0; i < dimnotte; i++){
-						for(int j = 0; j < rigaMax; j++){
-							cout<<matrix1[i][j]<<" ";
-						}cout<<endl;
-					}
-
-*/
-					conta--;
-					return Max(WarMachine3(posx,posy,somma1,--trav,matrix1, conta),WarMachine3(posx,posy,somma,trav,matrix,conta));
-				}
+			if(maxT > maxTotale){
+				maxTotale = maxT;
+				winterFell.push_back(new Stark(travestimenti-trav,maxTotale - maxRiga));
 			}
-		}
+
+			//cout<<"max:"<<max<<" trav:"<<trav<<endl;
+
+			WarMachine4(Ri,poY+1,trav);	
+		}	
 	}
 }
 
-int** InvertiSegni(int riga, int colonna,int** matrix){
-	for(int k=colonna; k<rigaMax; k++){
-		matrix[riga][k] = 0-matrix[riga][k];
-	}
-	return matrix;
+int CalcolaSommaDX(int riga, int posx){
+	int s = 0;
+	for(int j = posx; j < notte[riga].size(); j++)
+		s += notte[riga][j];
+	return s;
 }
 
-int CalcolaSomma2(int** matrix){
-	int somma = 0;
+int CalcolaSommaPositiviRiga(int riga){
+	int s = 0;
+	for(int i = 0; i < notte[riga].size(); i++)
+		if(notte[riga][i]>0)
+			s += notte[riga][i];
+	return s;
+}
 
-	for(int i=0; i<dimnotte; i++){
-		for(int k=0; k<notte[i].size(); k++){
-			if(matrix[i][k]>0){
-				somma += matrix[i][k];
-			}
-		}
-	}	
-	//cout<<"somma:"<<somma<<endl;
-	return somma;
+void InvertiSegni2(int riga, int colonna){
+	for(int k=colonna; k<notte[riga].size(); k++){
+		notte[riga][k] = 0-notte[riga][k];
+	}
+}
+
+void InvertiRiga(int riga){
+	for(int i = 0; i < notte[riga].size()/2; i++){
+		int aiuto = notte[riga][i];
+		notte[riga][i] = notte[riga][notte[riga].size()-1-i];
+		notte[riga][notte[riga].size()-1-i] = aiuto;
+	}
+}
+
+int WinterIsComing(int i, int trav){
+	if(i < winterFell.size() && trav > 0){
+		if(trav-winterFell[i]->costo>=0)
+			return Max(WinterIsComing(i+1,trav-winterFell[i]->costo)+winterFell[i]->guadagno, WinterIsComing(i+1,trav));
+		else
+			return WinterIsComing(i+1,trav);
+	}
+	else
+		return 0;
 }
 
 //******************************************************************************************
