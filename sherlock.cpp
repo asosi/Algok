@@ -110,12 +110,19 @@ int main(){
 	for(int i=0; i<serate-contaSerateTolte;i++)
 	sommatoria+= listaSerate[i]->scambi;
 	cout<<"MI SERVONO MASSIMO "<< sommatoria << " SCAMBI, E NE HO " << veritravestimenti <<"\n";
-	if(sommatoria==veritravestimenti)
+	
+	if(sommatoria<=veritravestimenti)
 		istanti = (serate)*(momenti);
 
-	if(sommatoria == veritravestimenti){
+	if(sommatoria <= veritravestimenti){
 		int kistanti = istanti;
 		kistanti += sommaFinale;
+
+		if(serate == 0)
+			kistanti += istantiSherlock;
+
+		cout<<"kistanti:"<<kistanti<<endl;
+
 		ofstream out("output.txt");
 		out<<kistanti;
 		return 0;
@@ -480,6 +487,8 @@ int WarMachine4(int Ri, int Ci, int trav){
 	}
 	else{
 		for(int i = 0; i < notte[Ri].size(); i++){
+			if(notte[Ri][0] < 0 && notte[Ri][0]<notte[i][notte[Ri].size()-1])
+					InvertiRiga(i);
 			if(notte[Ri][i]<0){
 				if(primoNeg==-1){
 					//cout<<"entro in quel cazzo di if: e i="<<i<<endl;
