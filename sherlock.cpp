@@ -517,7 +517,7 @@ int WarMachine4(int Ri, int Ci, int trav){
 				}
 			}
 		}
-		cout << "------------prendo: " << notte[Ri][poY] << "--------------\n";
+		cout << "------------prendo: " << notte[Ri][poY] << " con somma dx: "<< sol <<"--------------\n";
 
 		if(contaN > -1){
 			//cout<<"posy"<<poY<<"primoNeg:"<<primoNeg<<endl;
