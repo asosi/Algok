@@ -55,6 +55,7 @@ int CalcolaSommaPositiviRiga(int riga);
 
 
 int WinterIsComing(int i, int trav);
+int WinterIsComingII(int trav, int i);
 //***************************************VARIABILI******************************************
 int serate, momenti, travestimenti;
 int veritravestimenti; //si potra togliere questa riga
@@ -82,6 +83,8 @@ vector<Stark*> winterFell;
 int maxRiga=0;
 int maxTotale = 0;
 int travestimentiWinter;
+
+int** grandeInverno;
 //*****************************************************************************************
 
 int main(){
@@ -164,8 +167,16 @@ int main(){
 
 			cout<<endl<<"Prima della winter mi rimangono travestimenti:"<<travestimenti<<endl;
 
-
-			int k = WinterIsComing(0,travestimenti);
+			cout << "::::::::::::creo nuova matrice:::::::::::::::::::::::::::::::\n";
+			grandeInverno = new int*[travestimenti+1];
+			for(int i=0; i< travestimenti+1; i++)
+				grandeInverno[i] = new int[winterFell.size()];
+			for(int i=0; i<travestimenti+1; i++)
+				for(int j=0; j< winterFell.size(); j++)
+					grandeInverno[i][j] = -1;
+			cout << ":::::::::::::Controllare::::::::::::::::::::::::::::::::::::::\nChiamo WinterIsComingII\n";
+			//int k = WinterIsComing(0,travestimenti);
+			int k = WinterIsComingII(travestimenti,0);
 			cout<<istanti1<<endl;
 			istanti+=istanti1;
 
@@ -577,4 +588,16 @@ int WinterIsComing(int i, int trav){
 		return 0;
 }
 
+
+int WinterIsComingII(int trav, int i){
+  if(trav<=0)
+    return 0;
+  if(i>=winterFell.size())
+    return 0;
+  if(grandeInverno[trav][i]!=-1)
+    return grandeInverno[trav][i];
+  if(trav-winterFell[i]->costo>=0)
+  	grandeInverno[trav][i]= Max(WinterIsComingII(trav-winterFell[i]->costo,i+1)+winterFell[i]->guadagno,WinterIsComingII(trav,i+1));
+  return grandeInverno[trav][i];
+}
 //******************************************************************************************
