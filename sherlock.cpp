@@ -175,8 +175,8 @@ int main(){
 				for(int j=0; j< winterFell.size(); j++)
 					grandeInverno[i][j] = -1;
 			cout << ":::::::::::::Controllare::::::::::::::::::::::::::::::::::::::\nChiamo WinterIsComingII\n";
-			//int k = WinterIsComing(0,travestimenti);
-			int k = WinterIsComingII(travestimenti,0);
+			int k = WinterIsComing(0,travestimenti);
+			//int k = WinterIsComingII(travestimenti,0);
 			cout<<istanti1<<endl;
 			istanti+=istanti1;
 
@@ -508,6 +508,7 @@ int WarMachine4(int Ri, int Ci, int trav){
 				}
 				contaN++;
 				int soluz = CalcolaSommaDX(Ri,i);
+				cout<< notte[Ri][i] << " ha:"<<soluz<<" come somma a dx"<<endl;
 				//cout<<"sol:"<<sol<<" soluz:"<<soluz<<endl;
 
 				if(sol > soluz){
@@ -516,6 +517,7 @@ int WarMachine4(int Ri, int Ci, int trav){
 				}
 			}
 		}
+		cout << "------------prendo: " << notte[Ri][poY] << "--------------\n";
 
 		if(contaN > -1){
 			//cout<<"posy"<<poY<<"primoNeg:"<<primoNeg<<endl;
@@ -592,7 +594,7 @@ int WinterIsComing(int i, int trav){
 int WinterIsComingII(int trav, int i){
   if(trav<=0)
     return 0;
-  if(i>=winterFell.size())
+  if(i==winterFell.size())
     return 0;
   if(grandeInverno[trav][i]!=-1)
     return grandeInverno[trav][i];
