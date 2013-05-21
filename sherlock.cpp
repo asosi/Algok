@@ -487,7 +487,7 @@ int WarMachine4(int Ri, int Ci, int trav){
 	}
 	else{
 		for(int i = 0; i < notte[Ri].size(); i++){
-			if(notte[Ri][0] < 0 && notte[Ri][0]<notte[i][notte[Ri].size()-1])
+			if(notte[Ri][0] < 0 && notte[Ri][0]<notte[Ri][notte[Ri].size()-1])
 					InvertiRiga(i);
 			if(notte[Ri][i]<0){
 				if(primoNeg==-1){
@@ -520,7 +520,7 @@ int WarMachine4(int Ri, int Ci, int trav){
 
 			if(maxT > maxTotale){
 				maxTotale = maxT;
-				winterFell.push_back(new Stark(travestimentiWinter-trav,maxTotale - maxRiga));
+				winterFell.push_back(new Stark(travestimentiWinter-trav,maxTotale - maxRiga));//MODIFICATO, primo parametro era: travestimentiWinter-trav
 				maxRiga = maxTotale;
 				travestimentiWinter = trav;
 			}
@@ -530,6 +530,11 @@ int WarMachine4(int Ri, int Ci, int trav){
 			WarMachine4(Ri,poY+1,trav);	
 		}	
 	}
+}
+
+void OrdinaPertravestimenti(){
+
+	//MODIFICARE LA MERGE IN MODO CHE MI ORDINA WINTERFELL PER TRAVESTIMENTI
 }
 
 int CalcolaSommaDX(int riga, int posx){
