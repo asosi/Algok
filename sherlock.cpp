@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include <cmath>
+#include <cstdlib>
 
 using namespace std;
 
@@ -182,20 +182,9 @@ int main(){
 				int y = 1;
 
 				cout<<"travestimenti:"<<travestimenti<<endl;
-
-				for(int f = 0; f < dimnotte; f++){
-					maxTotale = CalcolaSommaPositiviRiga(f);
-					for(int z = 1; z <= travestimenti; z++){
-						int p = WarMachine5(f,z,0,1);
-						if(p>maxTotale){
-							winterFell.push_back(new Stark(y,p - maxTotale));
-							cout<<"val:"<<p-maxTotale<<" trav:"<<y<<endl;
-							maxTotale = p;
-							y=2;
-						}
-						else y=1;
-					}
-				}
+				cout<<"^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n";
+				cout << WarMachine5(0,travestimenti,0,1);
+				cout<<"\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n";
 /*
 				cout<<"--------------------------------------------------------------------------------"<<endl;
 				
