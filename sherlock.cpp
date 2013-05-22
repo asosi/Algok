@@ -84,7 +84,7 @@ int maxRiga=0;
 int maxTotale = 0;
 int travestimentiWinter;
 
-int** grandeInverno;
+int** KingsLanding;
 //*****************************************************************************************
 
 int main(){
@@ -168,15 +168,15 @@ int main(){
 			cout<<endl<<"Prima della winter mi rimangono travestimenti:"<<travestimenti<<endl;
 
 			cout << "::::::::::::creo nuova matrice:::::::::::::::::::::::::::::::\n";
-			grandeInverno = new int*[travestimenti+1];
+			KingsLanding = new int*[travestimenti+1];
 			for(int i=0; i< travestimenti+1; i++)
-				grandeInverno[i] = new int[winterFell.size()];
+				KingsLanding[i] = new int[winterFell.size()];
 			for(int i=0; i<travestimenti+1; i++)
 				for(int j=0; j< winterFell.size(); j++)
-					grandeInverno[i][j] = -1;
+					KingsLanding[i][j] = -1;
 			cout << ":::::::::::::Controllare::::::::::::::::::::::::::::::::::::::\nChiamo WinterIsComingII\n";
-			int k = WinterIsComing(0,travestimenti);
-			//int k = WinterIsComingII(travestimenti,0);
+			//int k = WinterIsComing(0,travestimenti);
+			int k = WinterIsComingII(travestimenti,0);
 			cout<<istanti1<<endl;
 			istanti+=istanti1;
 
@@ -492,6 +492,8 @@ int WarMachine4(int Ri, int Ci, int trav){
 	int poY = 0;
 	int primoNeg = -1;
 	int contaN = 0;
+	int PiuPic = 0;
+	int posPiuPic = 0;
 	if(trav == 0){
 		//cout<<"esco"<<endl;
 		return maxTotale;
@@ -501,13 +503,18 @@ int WarMachine4(int Ri, int Ci, int trav){
 			if(notte[Ri][0] < 0 && notte[Ri][0]<notte[Ri][notte[Ri].size()-1])
 					InvertiRiga(i);
 			if(notte[Ri][i]<0){
+				int soluz = CalcolaSommaDX(Ri,i);
+				if(notte[Ri][i]<PiuPic){
+					PiuPic = notte[Ri][i];
+					posPiuPic = i;
+				}
 				if(primoNeg==-1){
 					//cout<<"entro in quel cazzo di if: e i="<<i<<endl;
 					poY = i;
 					primoNeg++;
+					sol = soluz;
 				}
 				contaN++;
-				int soluz = CalcolaSommaDX(Ri,i);
 				cout<< notte[Ri][i] << " ha:"<<soluz<<" come somma a dx"<<endl;
 				//cout<<"sol:"<<sol<<" soluz:"<<soluz<<endl;
 
@@ -517,6 +524,11 @@ int WarMachine4(int Ri, int Ci, int trav){
 				}
 			}
 		}
+
+		if(sol > 0){
+			poY = posPiuPic;
+		}
+
 		cout << "------------prendo: " << notte[Ri][poY] << " con somma dx: "<< sol <<"--------------\n";
 
 		if(contaN > -1){
@@ -590,16 +602,15 @@ int WinterIsComing(int i, int trav){
 		return 0;
 }
 
-
 int WinterIsComingII(int trav, int i){
   if(trav<=0)
     return 0;
   if(i==winterFell.size())
     return 0;
-  if(grandeInverno[trav][i]!=-1)
-    return grandeInverno[trav][i];
+  if(KingsLanding[trav][i]!=-1)
+    return KingsLanding[trav][i];
   if(trav-winterFell[i]->costo>=0)
-  	grandeInverno[trav][i]= Max(WinterIsComingII(trav-winterFell[i]->costo,i+1)+winterFell[i]->guadagno,WinterIsComingII(trav,i+1));
-  return grandeInverno[trav][i];
+  	KingsLanding[trav][i]= Max(WinterIsComingII(trav-winterFell[i]->costo,i+1)+winterFell[i]->guadagno,WinterIsComingII(trav,i+1));
+  return KingsLanding[trav][i];
 }
 //******************************************************************************************
