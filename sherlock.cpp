@@ -1,6 +1,8 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <cmath>
+
 using namespace std;
 
 
@@ -41,6 +43,7 @@ int SommaElementi(vector<int> v);
 
 void Ironman();
 int WarMachine4(int Ri, int Ci, int trav);
+int WarMachine5(int Ri, int trav, int i, int segno);
 
 void InvertiSegni2(int riga, int colonna);
 void InvertiRiga(int riga);
@@ -85,6 +88,7 @@ int maxTotale = 0;
 int travestimentiWinter;
 
 int** KingsLanding;
+int** Targaryen;
 //*****************************************************************************************
 
 int main(){
@@ -148,7 +152,7 @@ int main(){
 		cout<<"travestimenti prima di war:"<<travestimenti<<endl;
 		if(travestimenti>0){
 			int istanti1;
-			for(int i = 0; i < dimnotte; i++){
+			/*for(int i = 0; i < dimnotte; i++){
 				if(notte[i][0] < 0 && notte[i][0]<notte[i][notte[i].size()-1]){
 					InvertiRiga(i);
 					//cout << "scambio: "<< notte[i][0]<< " " << notte[i][notte[i].size()-1]<< endl;
@@ -156,6 +160,7 @@ int main(){
 				maxRiga = CalcolaSommaPositiviRiga(i);
 				maxTotale = maxRiga;
 				travestimentiWinter = travestimenti;
+
 				istanti1 = WarMachine4(i, 0, travestimenti);
 			}
 			cout<<endl<<"Dopo la WarMAchine istanti:"<<istanti1<<endl;
@@ -163,7 +168,50 @@ int main(){
 			cout<<endl<<"winterFell:"<<endl;
 			for(int i = 0; i < winterFell.size(); i++){
 				cout<<"array "<<i<<": max:"<<winterFell[i]->guadagno<<" vestiti:"<<winterFell[i]->costo<<endl;
-			}
+			}*/
+
+			//nuova soluzione
+
+				Targaryen = new int*[travestimenti+1];
+				for(int z=0; z< travestimenti+1; z++)
+					Targaryen[z] = new int[momenti];
+				for(int z=0; z<travestimenti+1; z++)
+					for(int j=0; j< momenti; j++)
+						Targaryen[z][j] = -1;
+
+				int y = 1;
+
+				cout<<"travestimenti:"<<travestimenti<<endl;
+
+				for(int f = 0; f < dimnotte; f++){
+					maxTotale = CalcolaSommaPositiviRiga(f);
+					for(int z = 1; z <= travestimenti; z++){
+						int p = WarMachine5(f,z,0,1);
+						if(p>maxTotale){
+							winterFell.push_back(new Stark(y,p - maxTotale));
+							cout<<"val:"<<p-maxTotale<<" trav:"<<y<<endl;
+							maxTotale = p;
+							y=2;
+						}
+						else y=1;
+					}
+				}
+/*
+				cout<<"--------------------------------------------------------------------------------"<<endl;
+				
+				for(int z=0; z<travestimenti+1; z++){
+					for(int j=0; j< momenti; j++)
+						cout<<Targaryen[z][j]<<" ";
+					cout<<endl;
+				}
+
+				cout<<"--------------------------------------------------------------------------------"<<endl;
+				cout<<p<<endl;
+				cout<<"--------------------------------------------------------------------------------"<<endl;
+
+*/
+
+			//***************************************
 
 			cout<<endl<<"Prima della winter mi rimangono travestimenti:"<<travestimenti<<endl;
 
@@ -177,8 +225,8 @@ int main(){
 			cout << ":::::::::::::Controllare::::::::::::::::::::::::::::::::::::::\nChiamo WinterIsComingII\n";
 			//int k = WinterIsComing(0,travestimenti);
 			int k = WinterIsComingII(travestimenti,0);
-			cout<<istanti1<<endl;
-			istanti+=istanti1;
+			//cout<<istanti1<<endl;
+			//istanti+=istanti1;
 
 			k += istantiSherlock;
 
@@ -504,6 +552,7 @@ int WarMachine4(int Ri, int Ci, int trav){
 					InvertiRiga(i);
 			if(notte[Ri][i]<0){
 				int soluz = CalcolaSommaDX(Ri,i);
+
 				if(notte[Ri][i]<PiuPic){
 					PiuPic = notte[Ri][i];
 					posPiuPic = i;
@@ -515,7 +564,7 @@ int WarMachine4(int Ri, int Ci, int trav){
 					sol = soluz;
 				}
 				contaN++;
-				cout<< notte[Ri][i] << " ha:"<<soluz<<" come somma a dx"<<endl;
+				//cout<< notte[Ri][i] << " ha:"<<soluz<<" come somma a dx"<<endl;
 				//cout<<"sol:"<<sol<<" soluz:"<<soluz<<endl;
 
 				if(sol > soluz){
@@ -525,11 +574,11 @@ int WarMachine4(int Ri, int Ci, int trav){
 			}
 		}
 
-		if(sol > 0){
+		if(sol >= 0){
 			poY = posPiuPic;
 		}
 
-		cout << "------------prendo: " << notte[Ri][poY] << " con somma dx: "<< sol <<"--------------\n";
+		//cout << "------------prendo: " << notte[Ri][poY] << " con somma dx: "<< sol <<"--------------\n";
 
 		if(contaN > -1){
 			//cout<<"posy"<<poY<<"primoNeg:"<<primoNeg<<endl;
@@ -557,9 +606,34 @@ int WarMachine4(int Ri, int Ci, int trav){
 	}
 }
 
-void OrdinaPertravestimenti(){
-
-	//MODIFICARE LA MERGE IN MODO CHE MI ORDINA WINTERFELL PER TRAVESTIMENTI
+int WarMachine5(int Ri, int trav, int i, int segno){
+	if(i==notte[Ri].size()){
+	 	return 0;
+	 }
+	if(notte[Ri][i]*segno>0){//uguali
+		if(Targaryen[trav][i]!=-1){
+		    return Targaryen[trav][i];
+		}
+		else{
+			int o = segno/abs(segno);
+			Targaryen[trav][i] = WarMachine5(Ri,trav,i+1,segno)+notte[Ri][i]*o;
+			return Targaryen[trav][i];	
+		}
+	}
+	else{//diversi
+		if(Targaryen[trav][i]!=-1){
+		    return Targaryen[trav][i];
+		}
+	  	if(trav-1>=0){
+			int o = -segno/abs(segno);
+		  	Targaryen[trav][i]= Max(WarMachine5(Ri,trav-1,i+1,notte[Ri][i])+notte[Ri][i]*o,WarMachine5(Ri,trav,i+1,segno));
+			return Targaryen[trav][i];	
+	  	}
+	  	else{
+			Targaryen[trav][i] = WarMachine5(Ri,trav,i+1,segno);
+		}
+	}
+	return Targaryen[trav][i];
 }
 
 int CalcolaSommaDX(int riga, int posx){
