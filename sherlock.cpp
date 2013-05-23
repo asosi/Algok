@@ -152,7 +152,7 @@ int main(){
 		cout<<"travestimenti prima di war:"<<travestimenti<<endl;
 		if(travestimenti>0){
 			int istanti1;
-			/*for(int i = 0; i < dimnotte; i++){
+			for(int i = 0; i < dimnotte; i++){
 				if(notte[i][0] < 0 && notte[i][0]<notte[i][notte[i].size()-1]){
 					InvertiRiga(i);
 					//cout << "scambio: "<< notte[i][0]<< " " << notte[i][notte[i].size()-1]<< endl;
@@ -163,15 +163,15 @@ int main(){
 
 				istanti1 = WarMachine4(i, 0, travestimenti);
 			}
-			cout<<endl<<"Dopo la WarMAchine istanti:"<<istanti1<<endl;
+/*			cout<<endl<<"Dopo la WarMAchine istanti:"<<istanti1<<endl;
 
 			cout<<endl<<"winterFell:"<<endl;
 			for(int i = 0; i < winterFell.size(); i++){
 				cout<<"array "<<i<<": max:"<<winterFell[i]->guadagno<<" vestiti:"<<winterFell[i]->costo<<endl;
-			}*/
-
+			}
+*/
 			//nuova soluzione
-
+/*
 				Targaryen = new int*[veritravestimenti+1];
 				for(int z=0; z< veritravestimenti+1; z++)
 					Targaryen[z] = new int[momenti];
@@ -183,15 +183,26 @@ int main(){
 
 				cout<<"travestimenti:"<<veritravestimenti<<endl;
 				cout<<"^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n";
-					int l = WarMachine5(0,veritravestimenti,0,1);
-					for(int z=0; z<veritravestimenti+1; z++)
-						for(int j=0; j< momenti; j++)
-							Targaryen[z][j] = -1;
-					int u = WarMachine5(0,veritravestimenti,0,-1);
+				for(int n = 0; n < dimnotte; n++)
+				{
+					for(int x = 1; x <= travestimenti; x++)
+					{
+						int l = WarMachine5(n,x,0,1);
+						for(int z=0; z<veritravestimenti+1; z++)
+							for(int j=0; j< momenti; j++)
+								Targaryen[z][j] = -1;
+						int u = WarMachine5(n,x,0,-1);
+						for(int z=0; z<veritravestimenti+1; z++)
+							for(int j=0; j< momenti; j++)
+								Targaryen[z][j] = -1;
 					
-					cout<<"l:"<<l<<" u:"<<u;
-					cout<<endl<<"val:"<<min(l,u);
-				cout<<"\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n";
+
+					
+					//cout<<"l:"<<l<<" u:"<<u;
+						cout<<endl<<"rig:"<<n<<" val:"<<min(l,u);
+					}
+				}
+					cout<<"\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n";*/
 /*
 				cout<<"--------------------------------------------------------------------------------"<<endl;
 				
@@ -359,13 +370,25 @@ void Sherlock_markII(){
 	for(int i = serate-contaSerateTolte-1; i > -1; i--){
 		int maxH = SommaElementi(listaSerate[i]->h);
 		int maxJ = SommaElementi(listaSerate[i]->j);
+
 		if(maxH > maxJ){
 			listaSerate[i]->peso = maxH;
 			listaSerate[i]->inizio = 0;
 		}
 		else{				
 			listaSerate[i]->peso = maxJ;
-			listaSerate[i]->inizio = 1;
+			if(maxH == maxJ){
+				if(listaSerate[i]->h.size() == listaSerate[i]->j.size()){
+					if(listaSerate[i]->h[0] < listaSerate[i]->j[listaSerate[i]->j.size()-1])
+						listaSerate[i]->inizio = 0;
+					else
+						listaSerate[i]->inizio = 1;
+				}
+				else
+					listaSerate[i]->inizio = 1;
+			}
+			else
+				listaSerate[i]->inizio = 1;
 		}
 	}
 
@@ -505,7 +528,7 @@ void Ironman(){
 		if(listaSerate[i]->scambi != 1){
 			if(listaSerate[i]->inizio==0){
 				for(int k=0; k<listaSerate[i]->j.size(); k++){
-					cout << "son qui\n";
+					//cout << "son qui\n";
 					notte[x].push_back(listaSerate[i]->h[k]);
 					notte[x].push_back(0-listaSerate[i]->j[k]);
 				}
@@ -522,13 +545,13 @@ void Ironman(){
 			}
 			x++;
 		}
-	}
+	}/*
 	for(int i=0; i<dimnotte; i++){
 		for(int k=0; k<notte[i].size(); k++){
 			cout << notte[i][k] << " ";
 		}
 		cout << endl;
-	}
+	}*/
 }
 
 int WarMachine4(int Ri, int Ci, int trav){
