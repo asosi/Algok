@@ -172,18 +172,25 @@ int main(){
 
 			//nuova soluzione
 
-				Targaryen = new int*[travestimenti+1];
-				for(int z=0; z< travestimenti+1; z++)
+				Targaryen = new int*[veritravestimenti+1];
+				for(int z=0; z< veritravestimenti+1; z++)
 					Targaryen[z] = new int[momenti];
-				for(int z=0; z<travestimenti+1; z++)
+				for(int z=0; z<veritravestimenti+1; z++)
 					for(int j=0; j< momenti; j++)
 						Targaryen[z][j] = -1;
 
 				int y = 1;
 
-				cout<<"travestimenti:"<<travestimenti<<endl;
+				cout<<"travestimenti:"<<veritravestimenti<<endl;
 				cout<<"^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n";
-				cout << WarMachine5(0,travestimenti,0,1);
+					int l = WarMachine5(0,veritravestimenti,0,1);
+					for(int z=0; z<veritravestimenti+1; z++)
+						for(int j=0; j< momenti; j++)
+							Targaryen[z][j] = -1;
+					int u = WarMachine5(0,veritravestimenti,0,-1);
+					
+					cout<<"l:"<<l<<" u:"<<u;
+					cout<<endl<<"val:"<<min(l,u);
 				cout<<"\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n";
 /*
 				cout<<"--------------------------------------------------------------------------------"<<endl;
@@ -596,6 +603,9 @@ int WarMachine4(int Ri, int Ci, int trav){
 }
 
 int WarMachine5(int Ri, int trav, int i, int segno){
+
+	//cout<<"val:"<<notte[Ri][i]<<" segno:"<<segno<<" trav:"<<trav<<endl;
+
 	if(i==notte[Ri].size()){
 	 	return 0;
 	 }
