@@ -6,17 +6,22 @@
 using namespace std;
 
 void RobertDowneyJr();
-int WarMachine5(int trav, int i, int segno);
+int WarMachine5(int trav,int r, int i, int segno);
 
-int serate, momenti, travestimenti, veritravestimenti, rigaAnalizzata;
+int serate, momenti, travestimenti, veritravestimenti;
 int** matrice;
 int** Targaryen;
-vector<int> v;
+vector < vector < int > > v;
 
 int main(){
 	RobertDowneyJr();
-	for(int i = 0; i < v.size(); i++)
-		cout << v[i] << " ";
+	cout << "Stampo la matrice\n";
+	for(int i = 0; i < v.size(); i++){
+		for(int j=0; j<v[i].size(); j++){
+			cout << v[i][j] << " "; 
+		}
+		cout << endl;
+	}
 	cout << endl;
 	Targaryen = new int*[travestimenti+1];
 	for(int i=0; i< travestimenti+1; i++)
@@ -25,20 +30,15 @@ int main(){
 		for(int j=0; j< momenti; j++)
 			Targaryen[i][j] = -1;
 	int l;
+	int s;
 	int ris=0;
 	for(int trav=1; trav<=travestimenti; trav++){
 		if(ris!=momenti){
-			if(v[0]>0 && v[v.size()-1]>0)
-				l = WarMachine5(trav,0,1);
-			if(v[0]>0 && v[v.size()-1]<0)
-				l = WarMachine5(trav,0,-1);			
-			if(v[0]<0 && v[v.size()-1]<0)
-				l = WarMachine5(trav,0,-1);
-			if(v[0]<0 && v[v.size()-1]>0)
-				l = WarMachine5(trav,0,1);
+			l= WarMachine5(trav,0,0,0);
 			ris=l;
-			cout << "\n*********************************************\n";
+			cout << "**********************************\n";
 			cout << "Con " << trav << " travestimenti riesco a fare " << l;
+			cout << "\n**********************************\n";
 			for(int i=0; i<travestimenti+1; i++)
 				for(int j=0; j< momenti; j++)
 					Targaryen[i][j] = -1;
@@ -51,7 +51,7 @@ int main(){
 void RobertDowneyJr(){
 		
 	ifstream in ("input.txt");
-	in >> serate >> momenti >> travestimenti >> rigaAnalizzata;
+	in >> serate >> momenti >> travestimenti;
 	veritravestimenti = travestimenti;
 	matrice = new int*[serate];
 
@@ -72,49 +72,63 @@ void RobertDowneyJr(){
 	}
 
 	int k=0;
-	int val = matrice[rigaAnalizzata][0];
-
+	int val;
+	v.resize(serate);
+	for(int i = 0; i < serate; i++){
+		val = matrice[i][0];
 		for(int j = 0; j < momenti; j++){
-			if(matrice[rigaAnalizzata][j] == val){
-				k+=matrice[rigaAnalizzata][j];
+			if(matrice[i][j] == val){
+				k+=matrice[i][j];
 			}
 			else{
-				v.push_back(k);
-				k=matrice[rigaAnalizzata][j];
+				v[i].push_back(k);
+				k=matrice[i][j];
 				val=k;
 			}
 		}
-		v.push_back(k);
+		v[i].push_back(k);
+		k=0;
+	}
 }
 
-int WarMachine5(int trav, int i, int segno){
-
-	//cout<<"val:"<<notte[Ri][i]<<" segno:"<<segno<<" trav:"<<trav<<endl;
-
-	if(i==v.size()){
+int WarMachine5(int trav, int r, int i, int segno){
+	if(i==v[r].size())
 	 	return 0;
-	}
-	if(v[i]*segno>0){//uguali
+	int o;
+	if(v[r][i]>0)
+		o=1;
+	else
+		o=-1;
+	if(segno==0){
 		if(Targaryen[trav][i]!=-1){
 		    return Targaryen[trav][i];
 		}
 		else{
-			int o = segno/abs(segno);
-			Targaryen[trav][i] = WarMachine5(trav,i+1,segno)+v[i]*o;
+			Targaryen[trav][i] = max(WarMachine5(trav-1,r,i+1,o)+v[r][i]*o,WarMachine5(trav,r,i+1,-o));
 			return Targaryen[trav][i];
 		}
 	}
-	else{//diversi
-		if(Targaryen[trav][i]!=-1){
-		    return Targaryen[trav][i];
+	else{
+		if(v[r][i]*segno>0){//uguali
+			if(Targaryen[trav][i]!=-1){
+			    return Targaryen[trav][i];
+			}
+			else{
+				Targaryen[trav][i] = WarMachine5(trav,r,i+1,segno)+v[r][i]*o;
+				return Targaryen[trav][i];
+			}
 		}
-	  	if(trav-1>=0){
-			int o = -segno/abs(segno);
-		  	Targaryen[trav][i]= max(WarMachine5(trav-1,i+1,v[i])+v[i]*o,WarMachine5(trav,i+1,segno));
-			return Targaryen[trav][i];	
-	  	}
-	  	else{
-			Targaryen[trav][i] = WarMachine5(trav,i+1,segno);
+		else{//diversi
+			if(Targaryen[trav][i]!=-1){
+			    return Targaryen[trav][i];
+			}
+		  	if(trav-1>=0){
+			  	Targaryen[trav][i] = max(WarMachine5(trav-1,r,i+1,o)+v[r][i]*o,WarMachine5(trav,r,i+1,segno));
+				return Targaryen[trav][i];
+		  	}
+		  	else{
+				Targaryen[trav][i] = WarMachine5(trav,r,i+1,segno);
+			}
 		}
 	}
 	return Targaryen[trav][i];
