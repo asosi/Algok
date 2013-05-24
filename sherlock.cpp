@@ -89,8 +89,6 @@ int travestimentiWinter;
 
 int** KingsLanding;
 int** Targaryen;
-
-vector<vector <Stark*> > Avengers;
 //*****************************************************************************************
 
 int main(){
@@ -163,15 +161,15 @@ int main(){
 				maxTotale = maxRiga;
 				travestimentiWinter = travestimenti;
 
-				istanti1 = WarMachine4(i, 0, 1);
+				istanti1 = WarMachine4(i, 0, travestimenti);
 			}
-			cout<<endl<<"Dopo la WarMAchine istanti:"<<istanti1<<endl;
+/*			cout<<endl<<"Dopo la WarMAchine istanti:"<<istanti1<<endl;
 
 			cout<<endl<<"winterFell:"<<endl;
 			for(int i = 0; i < winterFell.size(); i++){
 				cout<<"array "<<i<<": max:"<<winterFell[i]->guadagno<<" vestiti:"<<winterFell[i]->costo<<endl;
 			}
-
+*/
 			//nuova soluzione
 /*
 				Targaryen = new int*[veritravestimenti+1];
@@ -233,15 +231,11 @@ int main(){
 					KingsLanding[i][j] = -1;
 			cout << ":::::::::::::Controllare::::::::::::::::::::::::::::::::::::::\nChiamo WinterIsComingII\n";
 			//int k = WinterIsComing(0,travestimenti);
-			
-			cout<<"uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu:"<<travestimenti<<endl;
-
-
 			int k = WinterIsComingII(travestimenti,0);
 			//cout<<istanti1<<endl;
 			//istanti+=istanti1;
 
-			//k += istantiSherlock;
+			k += istantiSherlock;
 
 			cout<<"****************************************************************";
 			cout<<endl<<k<<endl;
@@ -376,25 +370,13 @@ void Sherlock_markII(){
 	for(int i = serate-contaSerateTolte-1; i > -1; i--){
 		int maxH = SommaElementi(listaSerate[i]->h);
 		int maxJ = SommaElementi(listaSerate[i]->j);
-
 		if(maxH > maxJ){
 			listaSerate[i]->peso = maxH;
 			listaSerate[i]->inizio = 0;
 		}
 		else{				
 			listaSerate[i]->peso = maxJ;
-			if(maxH == maxJ){
-				if(listaSerate[i]->h.size() == listaSerate[i]->j.size()){
-					if(listaSerate[i]->h[0] < listaSerate[i]->j[listaSerate[i]->j.size()-1])
-						listaSerate[i]->inizio = 0;
-					else
-						listaSerate[i]->inizio = 1;
-				}
-				else
-					listaSerate[i]->inizio = 1;
-			}
-			else
-				listaSerate[i]->inizio = 1;
+			listaSerate[i]->inizio = 1;
 		}
 	}
 
@@ -551,13 +533,13 @@ void Ironman(){
 			}
 			x++;
 		}
-	}
+	}/*
 	for(int i=0; i<dimnotte; i++){
 		for(int k=0; k<notte[i].size(); k++){
 			cout << notte[i][k] << " ";
 		}
 		cout << endl;
-	}
+	}*/
 }
 
 int WarMachine4(int Ri, int Ci, int trav){
@@ -567,7 +549,7 @@ int WarMachine4(int Ri, int Ci, int trav){
 	int contaN = 0;
 	int PiuPic = 0;
 	int posPiuPic = 0;
-	if(trav > travestimenti){
+	if(trav == 0){
 		//cout<<"esco"<<endl;
 		return maxTotale;
 	}
@@ -614,14 +596,16 @@ int WarMachine4(int Ri, int Ci, int trav){
 			//cout<<endl;
 
 
+			trav--;
 			int maxT = CalcolaSommaPositiviRiga(Ri);
 
-			if(maxT > maxRiga){
-				maxRiga = maxT;
-				winterFell.push_back(new Stark(trav,maxT));//MODIFICATO, primo parametro era: travestimentiWinter-trav
+			if(maxT > maxTotale){
+				maxTotale = maxT;
+				winterFell.push_back(new Stark(travestimentiWinter-trav,maxTotale - maxRiga));//MODIFICATO, primo parametro era: travestimentiWinter-trav
+				maxRiga = maxTotale;
 				travestimentiWinter = trav;
 			}
-			trav++;
+
 			//cout<<"max:"<<max<<" trav:"<<trav<<endl;
 
 			WarMachine4(Ri,poY+1,trav);	
@@ -709,14 +693,8 @@ int WinterIsComingII(int trav, int i){
     return 0;
   if(KingsLanding[trav][i]!=-1)
     return KingsLanding[trav][i];
-  if(trav-winterFell[i]->costo>=0){
+  if(trav-winterFell[i]->costo>=0)
   	KingsLanding[trav][i]= Max(WinterIsComingII(trav-winterFell[i]->costo,i+1)+winterFell[i]->guadagno,WinterIsComingII(trav,i+1));
-  	return KingsLanding[trav][i];
-  }  
-  else{
-    KingsLanding[trav][i]= WinterIsComingII(trav,i+1);
-  	return KingsLanding[trav][i];
-  }
   return KingsLanding[trav][i];
 }
 //******************************************************************************************
