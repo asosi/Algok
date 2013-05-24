@@ -46,6 +46,7 @@ int main(){
 		else
 			trav=travestimenti+1;
 	}
+	cout<<endl;
 }
 
 void RobertDowneyJr(){

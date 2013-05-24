@@ -379,14 +379,30 @@ void Sherlock_markII(){
 			listaSerate[i]->inizio = 1;
 		}
 		else{
-			if(listaSerate[i]->h[0] > listaSerate[i]->j[0]){				
-				listaSerate[i]->peso = maxH;
-				listaSerate[i]->inizio = 0;
+			StampaVector(listaSerate[i]->h,"h:");
+			StampaVector(listaSerate[i]->j,"j:");
+
+			int l = 0;
+			bool finito = false;
+			while(listaSerate[i]->h[l] == listaSerate[i]->j[l] || l == listaSerate[i]->h.size() || l == listaSerate[i]->j.size()||!finito){
+				//cout<<"valori:"<<listaSerate[i]->h[l]<<" "<<listaSerate[i]->j[l]<<endl;
+				if(listaSerate[i]->h[l] > listaSerate[i]->j[l]){
+					cout<<"Ho scelto il valore:"<<listaSerate[i]->h[l]<<endl;			
+					listaSerate[i]->peso = maxH;
+					listaSerate[i]->inizio = 0;
+					finito = true;
+				}
+				else if(listaSerate[i]->h[l] < listaSerate[i]->j[l]){		
+					cout<<"Ho scelto il valore:"<<listaSerate[i]->j[l]<<endl;		
+					listaSerate[i]->peso = maxJ;
+					listaSerate[i]->inizio = 1;
+					finito = true;
+				}
+				l++;
 			}
-			else{				
-				listaSerate[i]->peso = maxJ;
-				listaSerate[i]->inizio = 1;
-			}
+
+
+			cout<<"quindi inizio da:"<<listaSerate[i]->inizio<<endl;
 		}
 	}
 
