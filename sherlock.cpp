@@ -374,9 +374,19 @@ void Sherlock_markII(){
 			listaSerate[i]->peso = maxH;
 			listaSerate[i]->inizio = 0;
 		}
-		else{				
+		else if(maxJ> maxH){
 			listaSerate[i]->peso = maxJ;
 			listaSerate[i]->inizio = 1;
+		}
+		else{
+			if(listaSerate[i]->h[0] > listaSerate[i]->j[0]){				
+				listaSerate[i]->peso = maxH;
+				listaSerate[i]->inizio = 0;
+			}
+			else{				
+				listaSerate[i]->peso = maxJ;
+				listaSerate[i]->inizio = 1;
+			}
 		}
 	}
 
@@ -533,13 +543,13 @@ void Ironman(){
 			}
 			x++;
 		}
-	}/*
+	}
 	for(int i=0; i<dimnotte; i++){
 		for(int k=0; k<notte[i].size(); k++){
 			cout << notte[i][k] << " ";
 		}
 		cout << endl;
-	}*/
+	}
 }
 
 int WarMachine4(int Ri, int Ci, int trav){

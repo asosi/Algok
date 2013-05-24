@@ -8,7 +8,7 @@ using namespace std;
 void RobertDowneyJr();
 int WarMachine5(int trav, int i, int segno);
 
-int serate, momenti, travestimenti, veritravestimenti;
+int serate, momenti, travestimenti, veritravestimenti, rigaAnalizzata;
 int** matrice;
 int** Targaryen;
 vector<int> v;
@@ -26,16 +26,19 @@ int main(){
 			Targaryen[i][j] = -1;
 	int l;
 	int ris=0;
-	for(int trav=1; trav<=travestimenti && find; trav++){
+	for(int trav=1; trav<=travestimenti; trav++){
 		if(ris!=momenti){
-			if(v[0]>0)
+			if(v[0]>0 && v[v.size()-1]>0)
+				l = WarMachine5(trav,0,1);
+			if(v[0]>0 && v[v.size()-1]<0)
+				l = WarMachine5(trav,0,-1);			
+			if(v[0]<0 && v[v.size()-1]<0)
 				l = WarMachine5(trav,0,-1);
-			else
+			if(v[0]<0 && v[v.size()-1]>0)
 				l = WarMachine5(trav,0,1);
 			ris=l;
-			cout << "**********************************\n";
+			cout << "\n*********************************************\n";
 			cout << "Con " << trav << " travestimenti riesco a fare " << l;
-			cout << "\n**********************************\n";
 			for(int i=0; i<travestimenti+1; i++)
 				for(int j=0; j< momenti; j++)
 					Targaryen[i][j] = -1;
@@ -48,7 +51,7 @@ int main(){
 void RobertDowneyJr(){
 		
 	ifstream in ("input.txt");
-	in >> serate >> momenti >> travestimenti;
+	in >> serate >> momenti >> travestimenti >> rigaAnalizzata;
 	veritravestimenti = travestimenti;
 	matrice = new int*[serate];
 
@@ -69,21 +72,19 @@ void RobertDowneyJr(){
 	}
 
 	int k=0;
-	int val = matrice[0][0];
+	int val = matrice[rigaAnalizzata][0];
 
-	for(int i = 0; i < serate; i++){
 		for(int j = 0; j < momenti; j++){
-			if(matrice[i][j] == val){
-				k+=matrice[i][j];
+			if(matrice[rigaAnalizzata][j] == val){
+				k+=matrice[rigaAnalizzata][j];
 			}
 			else{
 				v.push_back(k);
-				k=matrice[i][j];
+				k=matrice[rigaAnalizzata][j];
 				val=k;
 			}
 		}
 		v.push_back(k);
-	}
 }
 
 int WarMachine5(int trav, int i, int segno){
