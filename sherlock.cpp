@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -90,6 +89,8 @@ int travestimentiWinter;
 
 int** KingsLanding;
 int** Targaryen;
+
+vector<vector <Stark*> > Avengers;
 //*****************************************************************************************
 
 int main(){
@@ -160,9 +161,9 @@ int main(){
 				}
 				maxRiga = CalcolaSommaPositiviRiga(i);
 				maxTotale = maxRiga;
-				travestimentiWinter = veritravestimenti;
+				travestimentiWinter = travestimenti;
 
-				istanti1 = WarMachine4(i, 0, veritravestimenti);
+				istanti1 = WarMachine4(i, 0, 1);
 			}
 			cout<<endl<<"Dopo la WarMAchine istanti:"<<istanti1<<endl;
 
@@ -232,11 +233,15 @@ int main(){
 					KingsLanding[i][j] = -1;
 			cout << ":::::::::::::Controllare::::::::::::::::::::::::::::::::::::::\nChiamo WinterIsComingII\n";
 			//int k = WinterIsComing(0,travestimenti);
+			
+			cout<<"uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu:"<<travestimenti<<endl;
+
+
 			int k = WinterIsComingII(travestimenti,0);
 			//cout<<istanti1<<endl;
 			//istanti+=istanti1;
 
-			k += istantiSherlock;
+			//k += istantiSherlock;
 
 			cout<<"****************************************************************";
 			cout<<endl<<k<<endl;
@@ -562,7 +567,7 @@ int WarMachine4(int Ri, int Ci, int trav){
 	int contaN = 0;
 	int PiuPic = 0;
 	int posPiuPic = 0;
-	if(trav == 0){
+	if(trav > travestimenti){
 		//cout<<"esco"<<endl;
 		return maxTotale;
 	}
@@ -609,16 +614,14 @@ int WarMachine4(int Ri, int Ci, int trav){
 			//cout<<endl;
 
 
-			trav--;
 			int maxT = CalcolaSommaPositiviRiga(Ri);
 
-			if(maxT >= maxTotale){
-				maxTotale = maxT;
-				winterFell.push_back(new Stark(travestimentiWinter-trav,maxTotale - maxRiga));//MODIFICATO, primo parametro era: travestimentiWinter-trav
-				maxRiga = maxTotale;
+			if(maxT > maxRiga){
+				maxRiga = maxT;
+				winterFell.push_back(new Stark(trav,maxT));//MODIFICATO, primo parametro era: travestimentiWinter-trav
 				travestimentiWinter = trav;
 			}
-
+			trav++;
 			//cout<<"max:"<<max<<" trav:"<<trav<<endl;
 
 			WarMachine4(Ri,poY+1,trav);	
@@ -709,7 +712,7 @@ int WinterIsComingII(int trav, int i){
   if(trav-winterFell[i]->costo>=0){
   	KingsLanding[trav][i]= Max(WinterIsComingII(trav-winterFell[i]->costo,i+1)+winterFell[i]->guadagno,WinterIsComingII(trav,i+1));
   	return KingsLanding[trav][i];
-  }
+  }  
   else{
     KingsLanding[trav][i]= WinterIsComingII(trav,i+1);
   	return KingsLanding[trav][i];
