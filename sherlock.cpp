@@ -611,7 +611,7 @@ int WarMachine4(int Ri, int Ci, int trav){
 			trav--;
 			int maxT = CalcolaSommaPositiviRiga(Ri);
 
-			if(maxT > maxTotale){
+			if(maxT >= maxTotale){
 				maxTotale = maxT;
 				winterFell.push_back(new Stark(travestimentiWinter-trav,maxTotale - maxRiga));//MODIFICATO, primo parametro era: travestimentiWinter-trav
 				maxRiga = maxTotale;
